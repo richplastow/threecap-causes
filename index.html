@@ -1,0 +1,118 @@
+<!DOCTYPE HTML>
+<html lang="en-GB">
+<head>
+<!--
+
+1. META
+2. STYLE
+3. HEADER
+4. SPRITES
+5. SCRIPTS
+
+-->
+
+
+
+
+<!-- META -->
+
+<!-- Technical meta -->
+<base target="_blank">
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0,
+            shrink-to-fit=no, maximum-scale=1.0, user-scalable=no">
+
+<!-- Search engine meta -->
+<title>Threecap Causes</title>
+<meta name="description" content="Animated 3D motion-graphics, exploring some of
+  the causes of overtourism, with video-capturing by threecap">
+<link rel="author" href="README.md">
+
+
+
+
+<!-- STYLE -->
+
+<!-- Threecap and Scene styles -->
+<link rel="stylesheet" type="text/css" href="css/threecap-causes.css">
+<link rel="stylesheet" type="text/css" href="css/threecapui.css">
+
+</head>
+<body>
+
+
+
+
+<!-- HEADER -->
+
+<h1>Threecap Causes</h1>
+<p>
+  Animated 3D motion-graphics, exploring some of the causes of overtourism, with
+  video-capturing by
+  <a href="https://github.com/jbaicoianu/threecap">threecap</a> &nbsp; &nbsp;
+  <a href="https://github.com/richplastow/threecap-causes">Repo</a> &nbsp;
+  <a href="http://richplastow.com/threecap-causes/">Demo</a>
+</p>
+<button id="restart-preview">Restart Preview</button>
+<pre id="cli-help"></pre>
+
+
+
+
+<!-- SPRITES -->
+
+<div id="sprite-wrap">
+
+  <!-- Draw a spritesheet containing all the titles -->
+  <canvas id="title-spritesheet" width="2048" height="2048"></canvas>
+  <script>!function(){
+  const ctx = document.getElementById('title-spritesheet').getContext('2d')
+  ctx.fillStyle = '#ffffff'
+  ctx.font = '300px museo_sans500'
+  window.updateTitleSpritesheet = function (titles) {
+      ctx.clearRect(0,0,2048,2048)
+      titles.forEach( (title,i) => {
+          ctx.fillText(title, 100, 300*i+300)
+      })
+  }
+  }()</script>
+
+</div>
+
+
+
+
+<!-- SCRIPTS -->
+
+<!-- THREE.js -->
+<script src="lib/three.min.js"></script>
+
+<!-- THREE.js postprocessing -->
+<script src="lib/EffectComposer.js"></script>
+<script src="lib/ShaderPass.js"></script>
+<script src="lib/MaskPass.js"></script>
+<script src="lib/RenderPass.js"></script>
+
+<!-- THREE.js shaders -->
+<script src="lib/CopyShader.js"></script>
+<!-- <script src="lib/RGBShiftShader.js"></script> -->
+<script src="lib/OutlinePass.js"></script>
+
+<!-- Threecap -->
+<script src="lib/threecap/threecap.js"></script>
+
+<!-- TWEEN.js -->
+<script src="lib/tween.min.js"></script>
+
+<!-- Boot the App -->
+<script type="module">
+    import { boot } from './main/boot.js'
+    boot()
+</script>
+
+
+
+
+</body>
+</html>
