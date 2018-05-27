@@ -15,15 +15,18 @@ const
   , copyPass = new THREE.ShaderPass(THREE.CopyShader)
 
     //// Object3Ds.
-  , titles = []
+  , titleMeshes = []
   , cutouts = []
   , vidscreens = []
 
     //// Lights.
   , ambientLight = new THREE.AmbientLight(0xaaaab0)
-/*
+
+  , earthGeometry = new THREE.SphereGeometry(100, 100, 100, 32)
+
     //// Textures - for fast development:
   , earthMap = THREE.ImageUtils.loadTexture('images/512_earth_daymap.jpg')
+/*
   , earthBumpMap = THREE.ImageUtils.loadTexture('images/512_earth_normal_map.png')
   , earthSpecularMap = THREE.ImageUtils.loadTexture('images/512_earth_specular_map.png')
   , cloudMap = THREE.ImageUtils.loadTexture('images/1024_earth_clouds.jpg')
@@ -39,15 +42,17 @@ const
   , firstTextSpriteTexture = new THREE.CanvasTexture(
         document.getElementById('first-text-sprite')
     )
-
+*/
     //// Materials.
-  , earthMaterial = new THREE.MeshPhongMaterial({
-        map: earthMap
-      , bumpMap: earthBumpMap
-      , bumpScale: 10
-      , specularMap: earthSpecularMap
-      , specular: new THREE.Color('grey')
+  , earthMaterial = new THREE.MeshBasicMaterial({
+           color: 'rgb(202,2,45)'
+         , map: earthMap
+      // , bumpMap: earthBumpMap
+      // , bumpScale: 10
+      // , specularMap: earthSpecularMap
+      // , specular: new THREE.Color('grey')
     })
+/*
   , cloudMaterial = new THREE.MeshPhongMaterial({
         map: cloudMap
       , side: THREE.DoubleSide
@@ -87,9 +92,11 @@ const
 
     //// Sprites.
   , firstTextSprite = new THREE.Sprite(firstTextSpriteMaterial)
+*/
 
     //// Meshes.
   , earthMesh = new THREE.Mesh(earthGeometry, earthMaterial)
+/*
   , cloudMesh = new THREE.Mesh(cloudGeometry, cloudMaterial)
   , starMesh = new THREE.Mesh(starGeometry, starMaterial)
 */
@@ -106,13 +113,16 @@ const
     })
   , captureui = new THREEcapUI(capture)
 
+
+    //@TODO delete cube
   , cubeGeometry = new THREE.BoxGeometry(100,100,100)
   , cubeMaterial = new THREE.MeshPhongMaterial({
-        color: 0xff0000
+        color: 0x0000ff
     })
   , cubeMesh = new THREE.Mesh(cubeGeometry, cubeMaterial)
 
-scene.fog = new THREE.Fog(0x002060, -100, 450) // RT: rgb(0, 90, 83)
+scene.fog = new THREE.Fog(
+    new THREE.Color('rgb(202,2,45)'), -100, 450) // RT: rgb(0, 90, 83)
 
 
 
@@ -125,7 +135,7 @@ let module; export default module = {
   , camera
   , captureui
 
-  , titles
+  , titleMeshes
   , cutouts
   , vidscreens
 
@@ -140,12 +150,18 @@ let module; export default module = {
         // renderer.shadowMap.type = THREE.PCFSoftShadowMap // default THREE.PCFShadowMap
     	composer.addPass( new THREE.RenderPass(scene, camera) )
     	composer.addPass(copyPass)
+        scene.background = new THREE.Color('rgb(202,2,45)')
         scene.add(camera)
         scene.add(ambientLight)
     	// directionalLight.position.set(-200,300,500)
     	// scene.add(directionalLight)
-        scene.add(cubeMesh)
         document.body.appendChild(renderer.domElement)
+
+        scene.add(earthMesh)
+        // scene.add(cubeMesh)
+
+        //// Create all of the causes’ titles.
+        createTitles(config.causes, titleMeshes, scene)
 
 /*
         //// Add text sprites.
@@ -238,11 +254,53 @@ let module; export default module = {
         }
 
 */
-        cubeMesh.rotation.y -= 0.01
+        titleMeshes.forEach( title => {
+            // title.rotation.y -= 0.01
+        })
+        // cubeMesh.rotation.y -= 0.01
         TWEEN.update(now * 1000) // convert seconds to ms
     	renderer.clear()
     	composer.render()
     }
 
+
+}
+
+
+function createTitles (causes, titleMeshes, scene) {
+    const
+        geometry = new THREE.PlaneGeometry( 80, 80 / (2048/256) )
+    causes.forEach( (cause, i) => {
+        const
+            texture = new THREE.CanvasTexture(
+                document.getElementById('title-spritesheet') )
+          , material = new THREE.MeshPhongMaterial({
+                map: texture
+              , blending: THREE.AdditiveBlending
+              , depthTest: true
+              , transparent: true
+              , opacity: 1 //config.titleOpacityBeginEnd
+              // , color: 0x0000ff
+              , fog: false
+              , side: THREE.DoubleSide
+            })
+          , mesh = new THREE.Mesh(geometry, material)
+          , group = new THREE.Object3D()
+        mesh.position.set(0, config.titleAlt, 0)
+        mesh.rotation.set(0, Math.PI/2, 0)
+        group.rotation.set(0, 0, (i * Math.PI*2 / config.titleSpread) - Math.PI*0.5)
+        texture.repeat.set(1, 0.125) // scale x8 vertically
+        texture.offset.set(0, 1 - (0.125*i)) // move
+        group.add(mesh)
+        scene.add(group)
+        titleMeshes.push(mesh)
+        console.log(cause.title, i, 1 - (0.125*i), group.rotation.z);
+    })
+  //
+  // , cubeGeometry = new THREE.BoxGeometry(100,100,100)
+  // , cubeMaterial = new THREE.MeshPhongMaterial({
+  //       color: 0x0000ff
+  //   })
+  // , cubeMesh = new THREE.Mesh(cubeGeometry, cubeMaterial)
 
 }

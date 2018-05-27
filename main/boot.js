@@ -7,7 +7,7 @@ import tween from './tween.js'
 export function boot() {
 
     //// Draw the title-spritesheet.
-    window.updateTitleSpritesheet(config.titles)
+    window.updateTitleSpritesheet( config.causes.map( cause => cause.title ) )
 
     //// Bind buttons to functions.
     document.querySelector('#restart-preview').addEventListener(

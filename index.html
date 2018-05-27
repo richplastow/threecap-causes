@@ -55,6 +55,27 @@
   <a href="http://richplastow.com/threecap-causes/">Demo</a>
 </p>
 <button id="restart-preview">Restart Preview</button>
+<select id="select-cause">
+</select>
+<script type="module">
+    import config from './main/config.js'
+    import state from './main/state.js'
+    const $select = document.querySelector('#select-cause')
+    config.causes.forEach( (cause,i) => {
+        const $option = document.createElement('option')
+        $option.value = i
+        $option.innerHTML = `${i+1}. ${cause.title.toUpperCase()}`
+        $select.appendChild($option)
+    })
+    $select.addEventListener('change', e => {
+        document.cookie = 'causeindex='+$select.value
+        state.cause = +$select.value
+    })
+    const prevCauseMatch = document.cookie.match(/causeindex=(\d)/) || [null,0]
+    $select.value = prevCauseMatch[1]
+    state.cause = +$select.value
+</script>
+
 <pre id="cli-help"></pre>
 
 
@@ -69,11 +90,14 @@
   <script>!function(){
   const ctx = document.getElementById('title-spritesheet').getContext('2d')
   ctx.fillStyle = '#ffffff'
-  ctx.font = '300px museo_sans500'
+  ctx.font = '150px museo_sans500'
   window.updateTitleSpritesheet = function (titles) {
       ctx.clearRect(0,0,2048,2048)
       titles.forEach( (title,i) => {
-          ctx.fillText(title, 100, 300*i+300)
+          const
+              text = `${i+1}. ${title.toUpperCase()}`
+            , metrics = ctx.measureText(text)
+          ctx.fillText(text, (2048-metrics.width)/2, 256*i+128)
       })
   }
   }()</script>
