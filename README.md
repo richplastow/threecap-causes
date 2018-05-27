@@ -4,7 +4,7 @@
 [threecap](https://github.com/jbaicoianu/threecap)
 
 + __Last update:__  2018/05/25
-+ __Version:__      1.0.1
++ __Version:__      1.0.2
 
 [Repo](https://github.com/richplastow/threecap-causes) &nbsp;
 [Demo](http://richplastow.com/threecap-causes/)  

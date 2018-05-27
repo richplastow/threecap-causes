@@ -6,7 +6,7 @@ const
     previewWidth = 854
   , previewHeight = 480
   , previewFps = 25
-  , previewDuration = 8000 // in ms
+  , previewDuration = 7000 // in ms
 
   , captureWidth = 1920
   , captureHeight = 1080
@@ -19,11 +19,19 @@ const
   , titleOpacityBeginEnd = 0.99
   , titleOpacityFlying = 0.01
 
-  , cameraAlt = 110
-  , lookAtAlt = cameraAlt - 5
+  , cameraAlt = 310
+  , lookAtAlt = 100//cameraAlt - 5
+  // , cameraAlt = 110
+  // , lookAtAlt = cameraAlt - 5
+  , showHinges = 1
   , titleAlt = 112
   , titleAngleZ = 0.1 // make title face camera
-  , titleSpread = 8 // how many would fit round the globe
+  , titleSpread = 6 // how many would fit round the globe
+
+  , places = {
+        earlyLeft:  { relLat: -250/titleSpread, lon:0, alt:100 }
+      , earlyRight: { relLat: -200/titleSpread, lon:20, alt:100 }
+    }
 
   , causes = [
         {
@@ -33,6 +41,10 @@ const
       , {
             title: 'Cheap Flights'
           , previewDuration: 3000 // in ms
+          , cutouts: {
+                // earlyLeft:  { size:10, src:'airport-11-512.png', relAlt:-3 } // Phili
+                earlyRight: { size:10, src:'airport-9-512.png', relAlt:-1 } // Heathrow
+            }
         }
       , {
             title: 'Cruise Ships'
@@ -46,18 +58,16 @@ const
             title: 'Demographics'
           , previewDuration: 4000 // in ms
         }
-      , {
-            title: '(After Demographics)'
-          , previewDuration: 2000 // in ms
-        }
     ]
 
 
 //// Fill in causes `captureDuration`s
 causes.forEach( (cause,i) => {
     cause.captureDuration = cause.previewDuration * (previewFps / captureFps)
-    cause.startLat = -40 + (i     * 360 / titleSpread)
-    cause.endLat   = -40 + ((i+1) * 360 / titleSpread)
+    cause.camStartLat = (i-0.6) * 360 / titleSpread
+    cause.camEndLat   = (i+0.4) * 360 / titleSpread
+    cause.startLat    = i     * 360 / titleSpread
+    cause.endLat      = (i+1) * 360 / titleSpread
 })
 
 
@@ -83,9 +93,11 @@ let module; export default module = {
 
   , cameraAlt
   , lookAtAlt
+  , showHinges
   , titleAlt
   , titleAngleZ
   , titleSpread
 
+  , places
   , causes
 }

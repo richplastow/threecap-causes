@@ -9,20 +9,22 @@ const
     clock = new THREE.Clock()
   , scene = new THREE.Scene()
   , camera = new THREE.PerspectiveCamera(
-        35, config.previewWidth/config.previewHeight, 0.1, 2200)
+        35, config.previewWidth/config.previewHeight, 1, 300)
   , renderer = new THREE.WebGLRenderer({ antialias:true })
   , composer = new THREE.EffectComposer(renderer)
   , copyPass = new THREE.ShaderPass(THREE.CopyShader)
 
     //// Object3Ds.
   , titleMeshes = []
-  , cutouts = []
+  , cutoutMeshes = []
   , vidscreens = []
 
     //// Lights.
   , ambientLight = new THREE.AmbientLight(0xaaaab0)
 
+      //// Geometry.
   , earthGeometry = new THREE.SphereGeometry(100, 100, 100, 32)
+  , hingeGeometry = new THREE.BoxGeometry(1, 1, 40)
 
     //// Textures - for fast development:
   , earthMap = THREE.ImageUtils.loadTexture('images/512_earth_daymap.jpg')
@@ -51,6 +53,12 @@ const
       // , bumpScale: 10
       // , specularMap: earthSpecularMap
       // , specular: new THREE.Color('grey')
+    })
+
+  , hingeMaterial = new THREE.MeshBasicMaterial({
+        color: 0x00ff00
+          , transparent: true
+          , opacity: config.showHinges ? 1 : 0
     })
 /*
   , cloudMaterial = new THREE.MeshPhongMaterial({
@@ -115,14 +123,14 @@ const
 
 
     //@TODO delete cube
-  , cubeGeometry = new THREE.BoxGeometry(100,100,100)
+  , cubeGeometry = new THREE.BoxGeometry(130,130,130)
   , cubeMaterial = new THREE.MeshPhongMaterial({
         color: 0x0000ff
     })
   , cubeMesh = new THREE.Mesh(cubeGeometry, cubeMaterial)
 
 scene.fog = new THREE.Fog(
-    new THREE.Color('rgb(202,2,45)'), -100, 450) // RT: rgb(0, 90, 83)
+    new THREE.Color('rgb(202,2,45)'), 0, 750) // RT: rgb(0, 90, 83)
 
 
 
@@ -136,7 +144,7 @@ let module; export default module = {
   , captureui
 
   , titleMeshes
-  , cutouts
+  , cutoutMeshes
   , vidscreens
 
     //// Sets up the scene - should be called only once.
@@ -144,95 +152,33 @@ let module; export default module = {
 
         clock.stop()
         renderer.domElement.id = 'three-scene'
-    	renderer.setPixelRatio(config.pixelRatio)
-    	renderer.autoClear = false
+        renderer.setPixelRatio(config.pixelRatio)
+        renderer.autoClear = false
         // renderer.shadowMap.enabled = true
         // renderer.shadowMap.type = THREE.PCFSoftShadowMap // default THREE.PCFShadowMap
-    	composer.addPass( new THREE.RenderPass(scene, camera) )
-    	composer.addPass(copyPass)
+        composer.addPass( new THREE.RenderPass(scene, camera) )
+        composer.addPass(copyPass)
         scene.background = new THREE.Color('rgb(202,2,45)')
         scene.add(camera)
         scene.add(ambientLight)
-    	// directionalLight.position.set(-200,300,500)
-    	// scene.add(directionalLight)
+        // directionalLight.position.set(-200,300,500)
+        // scene.add(directionalLight)
         document.body.appendChild(renderer.domElement)
 
         scene.add(earthMesh)
-        // scene.add(cubeMesh)
+        scene.add(cubeMesh)
 
         //// Create all of the causes’ titles.
         createTitles(config.causes, titleMeshes, scene)
 
-/*
-        //// Add text sprites.
-        firstTextSprite.position.set(110, -77, -5)
-        firstTextSprite.scale.set(50, 50, 50)
-        scene.add(firstTextSprite)
+        //// Create all of the causes’ cutouts.
+        createCutouts(config.causes, cutoutMeshes, scene)
 
-        ////
-        let i = 0 // `i` is the ‘million-icon’ index
-        for (const yearIndex in data) {
-            const [ year, , delta ] = data[yearIndex]
-
-            for (let j=0; j<delta; j++) {
-                let y, z, sprite = new THREE.Sprite(usualSpriteMaterial)
-
-                //// `i` up to 100
-                if (100 > i) {
-                    z = (i % 10) * -7 // effectively x
-                    y = ~~(i / 10) * 7
-
-                //// Odd `i`, up to 500, greater than 100
-                } else if (500 > i && i % 2) {
-                    z = ~~(i / 20) * 7 - 28
-                    y = (i % 20) * 3.5 - 3.5
-
-                //// Even `i`, up to 500, greater than 100
-                } else if (500 > i) {
-                    z = ~~(i / 20) * -7 - 35
-                    y = (i % 20) * 3.5
-
-                //// `i` greater than 500
-                } else {
-                    z = (i % 50) * -7 + 140
-                    y = ~~(i / 50) * 7
-                }
-
-                sprite.position.set(110, y/2-52, z/2+14.5)
-                sprite.scale.set(3, 3, 3)
-                if (1950 === year)
-                    sprite.showAtFraction = 0
-                else if (2017 >= year)
-                    sprite.showAtFraction =
-                        0.25 // pause for 25% of the duration
-                      + (yearIndex * 0.006) // when the year-text changes
-                      + (
-                            (0.006 / delta) // fraction of the year
-                          * j // each ‘million-icon’ appears one-by-one
-                        )
-                else
-                    sprite.showAtFraction =
-                        0.35 // pause a bit at 2017
-                      + (yearIndex * 0.006) // when the year-text changes
-                      + (
-                            (0.006 / delta) // fraction of the year
-                          * j // each ‘million-icon’ appears one-by-one
-                        )
-                sprite.year = year
-                sprite.visible = false
-                sprites.push(sprite)
-                scene.add(sprite)
-
-                //// Increment the ‘million-icon’ index
-                i++
-            }
-        }
-*/
     }
 
   , render () {
-    	requestAnimationFrame(module.render)
-    	const delta = clock.getDelta() // needed, to enable `clock.elapsedTime`
+        requestAnimationFrame(module.render)
+        const delta = clock.getDelta() // needed, to enable `clock.elapsedTime`
         const now = clock.elapsedTime
         if (state.prevNow === ~~now)
             if ('capture' === state.currMode) return // only render once a second
@@ -259,8 +205,8 @@ let module; export default module = {
         })
         // cubeMesh.rotation.y -= 0.01
         TWEEN.update(now * 1000) // convert seconds to ms
-    	renderer.clear()
-    	composer.render()
+        renderer.clear()
+        composer.render()
     }
 
 
@@ -268,39 +214,107 @@ let module; export default module = {
 
 
 function createTitles (causes, titleMeshes, scene) {
-    const
-        geometry = new THREE.PlaneGeometry( 80, 80 / (2048/256) )
+    const titleGeometry = new THREE.PlaneGeometry( 80, 80 / (2048/256) )
     causes.forEach( (cause, i) => {
         const
-            texture = new THREE.CanvasTexture(
+            titleTexture = new THREE.CanvasTexture(
                 document.getElementById('title-spritesheet') )
-          , material = new THREE.MeshPhongMaterial({
-                map: texture
+          , titleMaterial = new THREE.MeshPhongMaterial({
+                map: titleTexture
               , blending: THREE.AdditiveBlending
-              , depthTest: true
+              , depthTest: false
               , transparent: true
-              , opacity: 1 //config.titleOpacityBeginEnd
-              // , color: 0x0000ff
+              , opacity: config.titleOpacityBeginEnd
               , fog: false
               , side: THREE.DoubleSide
             })
-          , mesh = new THREE.Mesh(geometry, material)
-          , group = new THREE.Object3D()
-        mesh.position.set(0, config.titleAlt, 0)
-        mesh.rotation.set(0, Math.PI/2, 0)
-        group.rotation.set(0, 0, (i * Math.PI*2 / config.titleSpread) - Math.PI*0.5)
-        texture.repeat.set(1, 0.125) // scale x8 vertically
-        texture.offset.set(0, 1 - (0.125*i)) // move
-        group.add(mesh)
-        scene.add(group)
-        titleMeshes.push(mesh)
-        console.log(cause.title, i, 1 - (0.125*i), group.rotation.z);
-    })
-  //
-  // , cubeGeometry = new THREE.BoxGeometry(100,100,100)
-  // , cubeMaterial = new THREE.MeshPhongMaterial({
-  //       color: 0x0000ff
-  //   })
-  // , cubeMesh = new THREE.Mesh(cubeGeometry, cubeMaterial)
+          , titleMesh = new THREE.Mesh(titleGeometry, titleMaterial)
+          , hingeMesh = new THREE.Mesh(hingeGeometry, hingeMaterial)
 
+        //// Show the correct part of the spritesheet.
+        titleTexture.repeat.set(1, 0.125) // scale x8 vertically
+        titleTexture.offset.set(0, 0.875 - (0.125*i)) // move
+
+        //// Rotate plane to slot into the hinge correctly
+        titleMesh.rotation.set(Math.PI/2, 0, -Math.PI/2)
+        hingeMesh.add(titleMesh)
+
+        //// Place the hinge in the correct location, and rotate it to be
+        //// perpendicular to the ground (`- 0.3` to appear straight).
+        updateHinge(
+            hingeMesh
+          , cause.endLat
+          , 0
+          , config.titleAlt
+        )
+
+        //// Add the hinge+title to the scene, and record the title-mesh.
+        scene.add(hingeMesh)
+        titleMeshes.push(titleMesh)
+
+    })
+}
+
+
+function createCutouts (causes, cutoutMeshes, scene) {
+    causes.forEach( (cause, i) => {
+        if (! cause.cutouts) return // has no cutouts
+        for ( const [placeName, cutout] of Object.entries(cause.cutouts) ) {
+            const
+                place = config.places[placeName]
+              , cutoutGeometry = new THREE.PlaneGeometry(cutout.size, cutout.size)
+              , map = THREE.ImageUtils.loadTexture('images/' + cutout.src)
+              , cutoutMaterial = new THREE.MeshBasicMaterial({
+                    map, transparent: true
+                })
+              , mesh = new THREE.Mesh(cutoutGeometry, cutoutMaterial)
+              , cutoutMesh = new THREE.Mesh(cutoutGeometry, cutoutMaterial)
+              , hingeMesh = new THREE.Mesh(hingeGeometry, hingeMaterial)
+
+            //// Rotate plane to slot into the hinge correctly
+            cutoutMesh.rotation.set(Math.PI/2, 0, -Math.PI/2)
+            hingeMesh.add(cutoutMesh)
+
+            //// Place the hinge in the correct location, and rotate it to be
+            //// perpendicular to the ground (`- 0.3` to appear straight).
+            updateHinge(
+                hingeMesh
+              , cause.endLat + place.relLat
+              , place.lon
+              , place.alt + cutout.size/2 + (cutout.relAlt || 0)
+            )
+console.log(cutout.src, place.lon, ~~hingeMesh.position.x, ~~hingeMesh.position.y, ~~hingeMesh.position.z);
+            //// Add the hinge+cutout to the scene, and record the cutout-mesh.
+            scene.add(hingeMesh)
+            cutoutMeshes.push(cutoutMesh)
+        }
+    })
+}
+
+
+function llaToXyz (lat, lon, alt) {
+    const
+        cosLat = Math.cos(lat * Math.PI / 180)
+      , sinLat = Math.sin(lat * Math.PI / 180)
+      , cosLon = Math.cos(lon * Math.PI / 180)
+      , sinLon = Math.sin(lon * Math.PI / 180)
+      , x = alt * cosLat * cosLon
+      , y = alt * cosLat * sinLon
+      , z = alt * sinLat
+    return {
+        x: x
+      , y: z  // for correct THREE.js coords, swap y with z...
+      , z: -y // ...and z with negative y
+    }
+}
+
+
+function updateHinge (hinge, lat, lon, alt) {
+    const pos = llaToXyz(lat, lon, alt)
+console.log(pos);
+    //// Place the hinge in the correct location.
+    hinge.position.set(pos.x, pos.y, pos.z)
+
+    //// Rotate to be perpendicular to the ground (`- 0.3` to appear straight).
+    hinge.rotation.set(0, 0, Math.PI * 2 * (lat / 360) - 0.3)
 }

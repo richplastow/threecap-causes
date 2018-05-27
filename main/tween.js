@@ -33,17 +33,19 @@ const tweenDefs = [
             state.cameraCurrent.position.alt = def.currState.alt
         } }
     }
-  , { // camera position’s latitude and longitude BEGIN
-        beginState: { lat:config.causes[state.cause].startLat, lon:0 }
+  , { // camera position’s latitude and longitude
+        // beginState: { lat:-180, lon:45 }
+        beginState: { lat:config.causes[state.cause].camStartLat, lon:0 }
       , currState:  {}
-      , endState:   { lat:config.causes[state.cause].endLat, lon:0 }
+      // , endState:   { lat:180, lon:45 }
+      , endState:   { lat:config.causes[state.cause].camEndLat, lon:0 }
       , beginFrac:  0.0 // fraction of whole duration, so `0`...
       , endFrac:    1.0 // ...`1` fills the entire sequence
       , tween:      null
       , easing:     TWEEN.Easing.Cubic.InOut
       , onReset:    function (def) {
-            tweenDefs[1].beginState.lat = config.causes[state.cause].startLat
-            tweenDefs[1].endState.lat   = config.causes[state.cause].endLat
+            tweenDefs[1].beginState.lat = config.causes[state.cause].camStartLat
+            tweenDefs[1].endState.lat   = config.causes[state.cause].camEndLat
         }
       , onUpdate:   function (def) { return function () {
             state.cameraCurrent.position.lat = def.currState.lat
@@ -56,7 +58,6 @@ const tweenDefs = [
               , state.cameraCurrent.position.lat + 10 // lookAtLat
               , state.cameraCurrent.position.lon      // lookAtLon
               , config.lookAtAlt                      // lookAtAlt
-              , state.cameraCurrent.position.alt + 10 // upAlt
             )
         } }
     }
@@ -70,7 +71,7 @@ const tweenDefs = [
       , easing:     TWEEN.Easing.Cubic.Out
       , onReset:    function (def) {
             scene.titleMeshes.forEach( titleMesh => {
-                titleMesh.material.opacity = config.titleOpacityBeginEnd
+                titleMesh.material.opacity = def.beginState.opacity
             })
         }
       , onUpdate:   function (def) { return function () {
@@ -95,24 +96,6 @@ const tweenDefs = [
             })
         } }
     }
-/*
-
-  , { // usual-sprite’s opacity
-        beginState: { opacity:0 }
-      , currState:  {}
-      , endState:   { opacity:1 }
-      , beginFrac:  0.1 // fraction of whole duration, so `0`...
-      , endFrac:    0.2 // ...`1` fills the entire sequence
-      , tween:      null
-      , easing:     TWEEN.Easing.Cubic.Out
-      , onReset:    function (def) {
-            scene.usualSpriteMaterial.opacity = 0
-        }
-      , onUpdate:   function (def) { return function () {
-            scene.usualSpriteMaterial.opacity = def.currState.opacity
-        } }
-    }
-*/
 ]
 
 
@@ -167,12 +150,11 @@ function updateCamera (
     camera
   , posLat, posLon, posAlt
   , lookAtLat, lookAtLon, lookAtAlt
-  , upAlt
 ) {
     const
         pos    = llaToXyz(posLat, posLon, posAlt)
       , lookAt = llaToXyz(lookAtLat, lookAtLon, lookAtAlt)
-      , up     = llaToXyz(posLat, posLon, upAlt)
+      , up     = llaToXyz(posLat, posLon, posAlt + 10)
     camera.position.set(pos.x, pos.y, pos.z)
     camera.lookAt(lookAt.x, lookAt.y, lookAt.z)
     camera.up.set(up.x, up.y, up.z)
