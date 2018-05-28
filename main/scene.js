@@ -9,7 +9,7 @@ const
     clock = new THREE.Clock()
   , scene = new THREE.Scene()
   , camera = new THREE.PerspectiveCamera(
-        35, config.previewWidth/config.previewHeight, 1, 300)
+        35, config.previewWidth/config.previewHeight, 10, 300)
   , renderer = new THREE.WebGLRenderer({ antialias:true })
   , composer = new THREE.EffectComposer(renderer)
   , copyPass = new THREE.ShaderPass(THREE.CopyShader)
@@ -244,13 +244,18 @@ function createTitles (causes, titleMeshes, scene) {
         updateHinge(
             hingeMesh
           , 0
-          , cause.endLon
+          , cause.titleLon + i/2 // `i/2` prevents overlaps
           , config.titleAlt
         )
+// console.log(cause.title, cause.titleLon, ~~hingeMesh.position.x, ~~hingeMesh.position.y, ~~hingeMesh.position.z);
 
         //// Add the hinge+title to the scene, and record the title-mesh.
         scene.add(hingeMesh)
         titleMeshes.push(titleMesh)
+
+        //// Only shown when the current cause is being previewed or captured.
+        titleMesh.visible = false
+        titleMesh.causeIndex = i
 
     })
 }
@@ -262,33 +267,60 @@ function createCutouts (causes, cutoutMeshes, scene) {
         for ( const [placeName, cutout] of Object.entries(cause.cutouts) ) {
             const
                 place = config.places[placeName]
-              , cutoutGeometry = new THREE.PlaneGeometry(cutout.size, cutout.size)
+              , size = cutout.size || 15 // 15 by default
+              , cutoutGeometry = new THREE.PlaneGeometry(size, size)
               , map = THREE.ImageUtils.loadTexture('images/' + cutout.src)
               , cutoutMaterial = new THREE.MeshBasicMaterial({
                     map, transparent: true
                 })
-              , mesh = new THREE.Mesh(cutoutGeometry, cutoutMaterial)
-              , cutoutMesh = new THREE.Mesh(cutoutGeometry, cutoutMaterial)
-              , hingeMesh = new THREE.Mesh(hingeGeometry, hingeMaterial)
+              , repeat = cutout.repeat || {}
+              , repeatTally = repeat.tally || 1
+              , repeatLon = repeat.lon || 0
+              , repeatLat = repeat.lat || 0
+              , repeatAlt = repeat.alt || 0
 
-            if (! place) console.error(`No such place '${placeName}'`, Object.keys(config.places))
+            //// Usually there’s no `repeat`, so `repeatTally` is 1 here:
+            for (let j=0; j<repeatTally; j++) {
+                const
+                    cutoutMesh = new THREE.Mesh(cutoutGeometry, cutoutMaterial)
+                  , hingeMesh = new THREE.Mesh(hingeGeometry, hingeMaterial)
 
-            //// Rotate plane to slot into the hinge correctly
-            cutoutMesh.rotation.set(0, 0, -Math.PI/2)
-            hingeMesh.add(cutoutMesh)
+                if (! place) console.error(`No such place '${placeName}'`, Object.keys(config.places))
 
-            //// Place the hinge in the correct location, and rotate it to be
-            //// perpendicular to the ground (`- 0.3` to appear straight).
-            updateHinge(
-                hingeMesh
-              , place.lat + (cutout.relLat || 0)
-              , cause.endLon + place.relLon + (cutout.relLon || 0)
-              , 100 + cutout.size/2 + (cutout.relAlt || 0)
-            )
-// console.log(cutout.src, place.lon, ~~hingeMesh.position.x, ~~hingeMesh.position.y, ~~hingeMesh.position.z);
-            //// Add the hinge+cutout to the scene, and record the cutout-mesh.
-            scene.add(hingeMesh)
-            cutoutMeshes.push(cutoutMesh)
+                //// Rotate plane to slot into the hinge correctly
+                cutoutMesh.rotation.set(0, 0, -Math.PI/2)
+                hingeMesh.add(cutoutMesh)
+
+                //// Apply ‘FLIP’.
+                if (cutout.FLIP) cutoutMesh.scale.x = -1
+
+                //// Place the hinge in the correct location, and rotate it to be
+                //// perpendicular to the ground (`- 0.3` to appear straight).
+                updateHinge(
+                    hingeMesh
+                  , 0 // the camera travels along the equator
+                      + place.lat // apply the place’s latitude...
+                      + (cutout.lat || 0) // ...and the cutout’s modifier
+                      + (j*repeatLat) // ...and this repeat’s latitude-gap
+                  , cause.titleLon // based on the cause’s (absolute) title-longitude
+                      + place.lon // apply the place’s relative-longitude...
+                      + (cutout.lon || 0) // ...and the cutout’s modifier
+                      + (j*repeatLon) // ...and this repeat’s longitude-gap
+                      // + (i/2) //@TODO fix flicker better
+                  , 100 // the Earth’s radius, so, ground-level
+                      + size/2 // the cutout’s bottom edge sits on the ground
+                      + (cutout.alt || 0) // apply the cutout’s modifier...
+                      + (j*repeatAlt) // ...and this repeat’s altitude-gap
+                )
+    // console.log(cutout.src, place.relLon, ~~hingeMesh.position.x, ~~hingeMesh.position.y, ~~hingeMesh.position.z);
+                //// Add the hinge+cutout to the scene, and record the cutout-mesh.
+                scene.add(hingeMesh)
+                cutoutMeshes.push(cutoutMesh)
+
+                //// Only shown when the current cause is being previewed or captured.
+                cutoutMesh.visible = false
+                cutoutMesh.causeIndex = i
+            }
         }
     })
 }

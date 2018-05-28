@@ -15,9 +15,38 @@ const tweenDefs = [
       , tween:      null
       , easing:     TWEEN.Easing.Cubic.InOut
       , onReset:    function (def) {
-            state.cameraCurrent.position.alt = tweenDefs[0].beginState.alt
+
+            //// Hide all titles except the ones we need for this run.
+            scene.titleMeshes.forEach( mesh => {
+                mesh.visible = state.cause === mesh.causeIndex
+            })
+            scene.cutoutMeshes.forEach( mesh => {
+                mesh.visible = state.cause === mesh.causeIndex
+            })
+
+            //// Set camera-pause positions, depending on current cause.
+            const
+                cause    = config.causes[state.cause]
+              , start    = cause.camStartLon
+              , seeTitle = cause.titleLon - 40
+              , pause    = cause.titleLon + (cause.camEndLon-cause.titleLon) / 2
+              , conclude = cause.camEndLon - 50
+              , end      = cause.camEndLon
+              , stick    = config.stick
+
+            tweenDefs[1].beginState.lon = stick || start
+            tweenDefs[1].endState.lon   = stick || seeTitle
+            tweenDefs[2].beginState.lon = stick || seeTitle
+            tweenDefs[2].endState.lon   = stick || pause
+            tweenDefs[3].beginState.lon = stick || pause
+            tweenDefs[3].endState.lon   = stick || conclude
+            tweenDefs[4].beginState.lon = stick || conclude
+            tweenDefs[4].endState.lon   = stick || end
+
             state.cameraCurrent.position.lat = tweenDefs[1].beginState.lat
             state.cameraCurrent.position.lon = tweenDefs[1].beginState.lon
+            state.cameraCurrent.position.alt = tweenDefs[0].beginState.alt
+
             updateCamera(
                 scene.camera
               , state.cameraCurrent.position.lat
@@ -32,34 +61,71 @@ const tweenDefs = [
             state.cameraCurrent.position.alt = def.currState.alt
         } }
     }
-  , { // camera position’s latitude and longitude
-        // beginState: { lat:-180, lon:45 }
-        beginState: { lat:0, lon:config.causes[state.cause].camStartLon}
+  , { // camera position’s latitude and longitude START -> TITLE
+        beginState: { lat:0, lon:null } // `lon` set in `tweenDefs[0].onReset()`
       , currState:  {}
-      // , endState:   { lat:180, lon:45 }
-      , endState:   { lat:0, lon:config.causes[state.cause].camEndLon}
+      , endState:   { lat:0, lon:null } // `lon` set in `tweenDefs[0].onReset()`
       , beginFrac:  0.0 // fraction of whole duration, so `0`...
-      , endFrac:    1.0 // ...`1` fills the entire sequence
+      , endFrac:    0.1 // ...`1` fills the entire sequence
       , tween:      null
-      , easing:     TWEEN.Easing.Cubic.InOut
-      , onReset:    function (def) {
-            tweenDefs[1].beginState.lon = config.causes[state.cause].camStartLon
-            tweenDefs[1].endState.lon   = config.causes[state.cause].camEndLon
-        }
+      , easing:     TWEEN.Easing.Cubic.Out
+      , onReset:    function (def) {}
       , onUpdate:   function (def) { return function () {
-            state.cameraCurrent.position.lat = def.currState.lat
-            state.cameraCurrent.position.lon = def.currState.lon
-            updateCamera(
-                scene.camera
-              , state.cameraCurrent.position.lat
-              , state.cameraCurrent.position.lon
-              , state.cameraCurrent.position.alt
-              , state.cameraCurrent.position.lat      // lookAtLat
-              , state.cameraCurrent.position.lon + 10 // lookAtLon
-              , config.lookAtAlt                      // lookAtAlt
-            )
+            const camPos = state.cameraCurrent.position
+            camPos.lat = def.currState.lat
+            camPos.lon = def.currState.lon
+            updateCamera(scene.camera, camPos.lat, camPos.lon, camPos.alt)
         } }
     }
+  , { // camera position’s latitude and longitude TITLE -> PAUSE
+        beginState: { lat:0, lon:null } // `lon` set in `tweenDefs[0].onReset()`
+      , currState:  {}
+      , endState:   { lat:0, lon:null } // `lon` set in `tweenDefs[0].onReset()`
+      , beginFrac:  0.1
+      , endFrac:    0.44
+      , tween:      null
+      , easing:     TWEEN.Easing.Quadratic.InOut
+      , onReset:    function (def) {}
+      , onUpdate:   function (def) { return function () {
+            const camPos = state.cameraCurrent.position
+            camPos.lat = def.currState.lat
+            camPos.lon = def.currState.lon
+            updateCamera(scene.camera, camPos.lat, camPos.lon, camPos.alt)
+        } }
+    }
+  , { // camera position’s latitude and longitude PAUSE -> CONCLUDE
+        beginState: { lat:0, lon:null } // `lon` set in `tweenDefs[0].onReset()`
+      , currState:  {}
+      , endState:   { lat:0, lon:null } // `lon` set in `tweenDefs[0].onReset()`
+      , beginFrac:  0.46
+      , endFrac:    0.9
+      , tween:      null
+      , easing:     TWEEN.Easing.Quadratic.InOut
+      , onReset:    function (def) {}
+      , onUpdate:   function (def) { return function () {
+            const camPos = state.cameraCurrent.position
+            camPos.lat = def.currState.lat
+            camPos.lon = def.currState.lon
+            updateCamera(scene.camera, camPos.lat, camPos.lon, camPos.alt)
+        } }
+    }
+  , { // camera position’s latitude and longitude CONCLUDE -> END
+        beginState: { lat:0, lon:null } // `lon` set in `tweenDefs[0].onReset()`
+      , currState:  {}
+      , endState:   { lat:0, lon:null } // `lon` set in `tweenDefs[0].onReset()`
+      , beginFrac:  0.9
+      , endFrac:    1.0
+      , tween:      null
+      , easing:     TWEEN.Easing.Cubic.In
+      , onReset:    function (def) {}
+      , onUpdate:   function (def) { return function () {
+            const camPos = state.cameraCurrent.position
+            camPos.lat = def.currState.lat
+            camPos.lon = def.currState.lon
+            updateCamera(scene.camera, camPos.lat, camPos.lon, camPos.alt)
+        } }
+    }
+/*
   , { // title opacity BEGIN
         beginState: { opacity:config.titleOpacityBeginEnd }
       , currState:  {}
@@ -95,6 +161,7 @@ const tweenDefs = [
             })
         } }
     }
+*/
 ]
 
 
@@ -148,12 +215,12 @@ function llaToXyz (lat, lon, alt) {
 function updateCamera (
     camera
   , posLat, posLon, posAlt
-  , lookAtLat, lookAtLon, lookAtAlt
 ) {
     const
-        pos    = llaToXyz(posLat, posLon, posAlt)
-      , lookAt = llaToXyz(lookAtLat, lookAtLon, lookAtAlt)
-      , up     = llaToXyz(posLat, posLon, posAlt + 10)
+        posLonMod = posLon + config.camLonOffset
+      , pos       = llaToXyz(posLat, posLonMod, posAlt)
+      , lookAt    = llaToXyz(posLat, posLonMod + 10, config.lookAtAlt)
+      , up        = llaToXyz(posLat, posLonMod, posAlt + 10)
     camera.position.set(pos.x, pos.y, pos.z)
     camera.lookAt(lookAt.x, lookAt.y, lookAt.z)
     camera.up.set(up.x, up.y, up.z)
