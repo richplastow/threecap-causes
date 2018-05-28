@@ -24,7 +24,7 @@ const
 
       //// Geometry.
   , earthGeometry = new THREE.SphereGeometry(100, 100, 100, 32)
-  , hingeGeometry = new THREE.BoxGeometry(1, 1, 40)
+  , hingeGeometry = new THREE.BoxGeometry(1, 40, 1)
 
     //// Textures - for fast development:
   , earthMap = THREE.ImageUtils.loadTexture('images/512_earth_daymap.jpg')
@@ -57,8 +57,8 @@ const
 
   , hingeMaterial = new THREE.MeshBasicMaterial({
         color: 0x00ff00
-          , transparent: true
-          , opacity: config.showHinges ? 1 : 0
+      , transparent: true
+      , opacity: config.showHinges ? 1 : 0
     })
 /*
   , cloudMaterial = new THREE.MeshPhongMaterial({
@@ -222,11 +222,11 @@ function createTitles (causes, titleMeshes, scene) {
           , titleMaterial = new THREE.MeshPhongMaterial({
                 map: titleTexture
               , blending: THREE.AdditiveBlending
-              , depthTest: false
+              , depthTest: true
               , transparent: true
               , opacity: config.titleOpacityBeginEnd
               , fog: false
-              , side: THREE.DoubleSide
+              // , side: THREE.DoubleSide
             })
           , titleMesh = new THREE.Mesh(titleGeometry, titleMaterial)
           , hingeMesh = new THREE.Mesh(hingeGeometry, hingeMaterial)
@@ -236,15 +236,15 @@ function createTitles (causes, titleMeshes, scene) {
         titleTexture.offset.set(0, 0.875 - (0.125*i)) // move
 
         //// Rotate plane to slot into the hinge correctly
-        titleMesh.rotation.set(Math.PI/2, 0, -Math.PI/2)
+        titleMesh.rotation.set(0, 0, -Math.PI/2)
         hingeMesh.add(titleMesh)
 
         //// Place the hinge in the correct location, and rotate it to be
         //// perpendicular to the ground (`- 0.3` to appear straight).
         updateHinge(
             hingeMesh
-          , cause.endLat
           , 0
+          , cause.endLon
           , config.titleAlt
         )
 
@@ -271,19 +271,21 @@ function createCutouts (causes, cutoutMeshes, scene) {
               , cutoutMesh = new THREE.Mesh(cutoutGeometry, cutoutMaterial)
               , hingeMesh = new THREE.Mesh(hingeGeometry, hingeMaterial)
 
+            if (! place) console.error(`No such place '${placeName}'`, Object.keys(config.places))
+
             //// Rotate plane to slot into the hinge correctly
-            cutoutMesh.rotation.set(Math.PI/2, 0, -Math.PI/2)
+            cutoutMesh.rotation.set(0, 0, -Math.PI/2)
             hingeMesh.add(cutoutMesh)
 
             //// Place the hinge in the correct location, and rotate it to be
             //// perpendicular to the ground (`- 0.3` to appear straight).
             updateHinge(
                 hingeMesh
-              , cause.endLat + place.relLat
-              , place.lon
-              , place.alt + cutout.size/2 + (cutout.relAlt || 0)
+              , place.lat + (cutout.relLat || 0)
+              , cause.endLon + place.relLon + (cutout.relLon || 0)
+              , 100 + cutout.size/2 + (cutout.relAlt || 0)
             )
-console.log(cutout.src, place.lon, ~~hingeMesh.position.x, ~~hingeMesh.position.y, ~~hingeMesh.position.z);
+// console.log(cutout.src, place.lon, ~~hingeMesh.position.x, ~~hingeMesh.position.y, ~~hingeMesh.position.z);
             //// Add the hinge+cutout to the scene, and record the cutout-mesh.
             scene.add(hingeMesh)
             cutoutMeshes.push(cutoutMesh)
@@ -311,10 +313,10 @@ function llaToXyz (lat, lon, alt) {
 
 function updateHinge (hinge, lat, lon, alt) {
     const pos = llaToXyz(lat, lon, alt)
-console.log(pos);
+
     //// Place the hinge in the correct location.
     hinge.position.set(pos.x, pos.y, pos.z)
 
     //// Rotate to be perpendicular to the ground (`- 0.3` to appear straight).
-    hinge.rotation.set(0, 0, Math.PI * 2 * (lat / 360) - 0.3)
+    hinge.rotation.set(0, Math.PI * 2 * (lon / 360) - 0.3, 0)
 }

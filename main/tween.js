@@ -15,18 +15,17 @@ const tweenDefs = [
       , tween:      null
       , easing:     TWEEN.Easing.Cubic.InOut
       , onReset:    function (def) {
+            state.cameraCurrent.position.alt = tweenDefs[0].beginState.alt
             state.cameraCurrent.position.lat = tweenDefs[1].beginState.lat
             state.cameraCurrent.position.lon = tweenDefs[1].beginState.lon
-            state.cameraCurrent.position.alt = tweenDefs[0].beginState.alt
             updateCamera(
                 scene.camera
               , state.cameraCurrent.position.lat
               , state.cameraCurrent.position.lon
               , state.cameraCurrent.position.alt
-              , state.cameraCurrent.position.lat + 10 // lookAtLat
-              , state.cameraCurrent.position.lon      // lookAtLon
+              , state.cameraCurrent.position.lat      // lookAtLat
+              , state.cameraCurrent.position.lon + 10 // lookAtLon
               , config.lookAtAlt                      // lookAtAlt
-              , state.cameraCurrent.position.alt + 10 // upAlt
             )
         }
       , onUpdate:   function (def) { return function () {
@@ -35,17 +34,17 @@ const tweenDefs = [
     }
   , { // camera position’s latitude and longitude
         // beginState: { lat:-180, lon:45 }
-        beginState: { lat:config.causes[state.cause].camStartLat, lon:0 }
+        beginState: { lat:0, lon:config.causes[state.cause].camStartLon}
       , currState:  {}
       // , endState:   { lat:180, lon:45 }
-      , endState:   { lat:config.causes[state.cause].camEndLat, lon:0 }
+      , endState:   { lat:0, lon:config.causes[state.cause].camEndLon}
       , beginFrac:  0.0 // fraction of whole duration, so `0`...
       , endFrac:    1.0 // ...`1` fills the entire sequence
       , tween:      null
       , easing:     TWEEN.Easing.Cubic.InOut
       , onReset:    function (def) {
-            tweenDefs[1].beginState.lat = config.causes[state.cause].camStartLat
-            tweenDefs[1].endState.lat   = config.causes[state.cause].camEndLat
+            tweenDefs[1].beginState.lon = config.causes[state.cause].camStartLon
+            tweenDefs[1].endState.lon   = config.causes[state.cause].camEndLon
         }
       , onUpdate:   function (def) { return function () {
             state.cameraCurrent.position.lat = def.currState.lat
@@ -55,8 +54,8 @@ const tweenDefs = [
               , state.cameraCurrent.position.lat
               , state.cameraCurrent.position.lon
               , state.cameraCurrent.position.alt
-              , state.cameraCurrent.position.lat + 10 // lookAtLat
-              , state.cameraCurrent.position.lon      // lookAtLon
+              , state.cameraCurrent.position.lat      // lookAtLat
+              , state.cameraCurrent.position.lon + 10 // lookAtLon
               , config.lookAtAlt                      // lookAtAlt
             )
         } }
@@ -65,8 +64,8 @@ const tweenDefs = [
         beginState: { opacity:config.titleOpacityBeginEnd }
       , currState:  {}
       , endState:   { opacity:config.titleOpacityFlying }
-      , beginFrac:  0.2
-      , endFrac:    0.5
+      , beginFrac:  0.1
+      , endFrac:    0.3
       , tween:      null
       , easing:     TWEEN.Easing.Cubic.Out
       , onReset:    function (def) {
@@ -84,8 +83,8 @@ const tweenDefs = [
         beginState: { opacity:config.titleOpacityFlying }
       , currState:  {}
       , endState:   { opacity:config.titleOpacityBeginEnd }
-      , beginFrac:  0.5
-      , endFrac:    0.8
+      , beginFrac:  0.4
+      , endFrac:    0.9
       , tween:      null
       , easing:     TWEEN.Easing.Cubic.In
       , onReset:    function (def) {
