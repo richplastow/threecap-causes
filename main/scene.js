@@ -31,7 +31,7 @@ const
   , hingeGeometry = new THREE.BoxGeometry(1, 40, 1) // only when showing hinges
 
     //// Textures - for fast development:
-  , earthMap = THREE.ImageUtils.loadTexture('images/512_earth_daymap.jpg')
+  , earthMap = THREE.ImageUtils.loadTexture('images/2048_earth_daymap.jpg')
 /*
   , earthBumpMap = THREE.ImageUtils.loadTexture('images/512_earth_normal_map.png')
   , earthSpecularMap = THREE.ImageUtils.loadTexture('images/512_earth_specular_map.png')
