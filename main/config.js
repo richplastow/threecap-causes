@@ -1,8 +1,9 @@
 //// CONFIGURATION AND CONSTANTS
 
 const
-    stick = 0 // set to a longitude, to freeze the camera at that position
+    stick = 0//247.9 // set to a longitude, to freeze the camera at that position
   , camLonOffset = 0 // set to a longitude to start the camera at that position
+  , showHinges = false
 
     //// Dimensions, framerate, duration.
   , previewWidth = 854
@@ -25,7 +26,6 @@ const
   // , lookAtAlt = 100
   , cameraAlt = 110
   , lookAtAlt = cameraAlt - 5
-  , showHinges = false
   , titleAlt = 112
   , titleSpread = 1 // how many would fit round the globe
   , ts = titleSpread
@@ -138,6 +138,18 @@ const
       , conclude_r_0: { lat:-5, lon:282 }
       , conclude_c_0: { lat: 0, lon:283 }
 
+      , conclude_l_1: { lat: 5, lon:290 }
+      , conclude_r_1: { lat:-5, lon:292 }
+      , conclude_c_1: { lat: 0, lon:293 }
+
+      , conclude_l_2: { lat: 5, lon:290 }
+      , conclude_r_2: { lat:-5, lon:292 }
+      , conclude_c_2: { lat: 0, lon:293 }
+
+      , conclude_l_3: { lat: 5, lon:300 }
+      , conclude_r_3: { lat:-5, lon:302 }
+      , conclude_c_3: { lat: 0, lon:303 }
+
     }
 
   , causes = [
@@ -154,7 +166,7 @@ const
                early_l_0: { src:'airport-a-1-easyjet-parked-1024.png'
                  , size:30, lat: 5, repeat:{ tally:6, lon:6 } }
              , early_r_0: { src:'airport-a-2-ryanair-parked-1024.png'
-                 , size:30, lat:-5, repeat:{ tally:6, lon:6 } }
+                 , size:30, lat:-5, repeat:{ tally:6, lon:6 }, lon:-2 }
 
                //// UK and Euro Airport signs.
              , early_l_5: { src:'airport-b-1-stansted-512.png', size:25, lat:2, alt:-1 }
@@ -167,26 +179,36 @@ const
              , early_r_C: { src:'airport-c-3-barcelona-512.png' }
              // , early_l_D: { src:'airport-c-1-mallorca-512.png' } //@TODO use this?
              , early_r_D: { src:'airport-c-6-amsterdam-512.png', size:25, alt:8 }
+             , early_l_D: { src:'airport-d-1-terminal2-1024.png', alt:6 }
 
                //// In the airport.
-             , pause_l_0: { src:'airport-d-1-terminal2-1024.png', alt:6 }
-             , pause_c_0: { src:'airport-e-2-crowd-center-1024.png', size:11, alt:-0.5, lon:-1 }
+             , pause_c_0: { src:'airport-e-1-crowd-left-512.png', size:8, lat:0, lon:0, alt:-1 }
+             , pause_l_1: { src:'airport-d-5-pizza-512.png', lat:-1, lon:2, alt:-2
+                 , animate: { begin:144.45, end:145.5, alt:-10, lon:-1 } }
 
-             , pause_l_1: { src:'airport-e-1-crowd-left-512.png', size:8, lat:1, alt:-1 }
-             , pause_r_1: { src:'airport-e-3-crowd-right-512.png', size:8, lat:-1, alt:-1 }
+             , pause_r_1: { src:'airport-e-3-crowd-right-512.png', size:8, lat:0, lon:0, alt:-1 }
 
-             , pause_l_2: { src:'airport-d-2-checkin-1024.png', lat:2, alt:5.5 }
+             , pause_l_2: { src:'airport-d-2-checkin-1024.png', lat:2, alt:5 }
              , pause_r_2: { src:'airport-d-3-arrivals-1024.png', lat:-3, alt:5 }
-             , pause_c_3: { src:'airport-d-5-pizza-512.png', size:18, lat:-1, alt:-2 }
-             , pause_l_4: { src:'airport-d-6-beer-512.png', size:25, lat:5, alt:-3 }
-             , pause_r_4: { src:'airport-d-7-coffee-512.png', size:25, lat:-5, alt:-3 }
+             , pause_r_4: { src:'airport-d-6-beer-512.png', size:30, lat:-2, alt:-6
+                 , animate: { begin:144.6, end:146, alt:-30, lon:-1 } }
+             // , pause_c_0: { src:'airport-e-2-crowd-center-1024.png', size:11, alt:-0.5, lon:-1 }
+             // , pause_r_2: { src:'airport-d-7-coffee-512.png', size:25, lat:-5, alt:-3 }
+             , pause_c_5: { src:'airport-d-4-departures-512.png', size:35, lat:2, alt:-3
+                 , animate: { begin:144.3, end:145, alt:-30, lon:-1 } }
+
+               //// “...free flights...”
+             , pause_l_5: { src:'airport-a-2-ryanair-parked-1024.png', size:99, lat:30, alt:-10
+                 , animate: { begin:143, end:152, lat:-35, lon:5, alt:4 } }
 
                //// Multiplying planes.
-             , late_c_0:  { src:'airport-f-1-plane-underside-512.png', size:40, alt:9 }
              , late_l_1:  { src:'airport-f-1-plane-underside-512.png'
                  , size:10, repeat: { tally:4, lat:3, lon:-3, alt:3 } }
              , late_r_1:  { src:'airport-f-1-plane-underside-512.png'
                  , size:10, repeat: { tally:4, lat:-3, lon:-3, alt:3 } }
+             , late_c_0:  { src:'airport-f-1-plane-underside-512.png'
+                 , size:99, alt:-99, animate: { begin:145, end:160, alt:80 } }
+
              , late_l_3:  { src:'airport-f-1-plane-underside-512.png'
                  , size:7, lat:5, repeat: { tally:4, lat:3, lon:-3, alt:3 } }
              , late_r_3:  { src:'airport-f-1-plane-underside-512.png'
@@ -202,32 +224,57 @@ const
                  , size:4, lat:7, repeat: { tally:6, alt:7 } }
              , late_r_5:  { src:'airport-f-1-plane-underside-512.png'
                  , size:4, lat:-7, repeat: { tally:6, alt:7 }, lon:-3.5 }
+             , late_c_5:  { src:'airport-f-7-refuel-left-512.png', size:15, lat:-12, lon:22.5, alt:-0.7, FLIP
+                 , animate: { begin:248.2, end:249.5, lat:-2 } } // back
 
              , late_l_6:  { src:'airport-f-1-plane-underside-512.png'
                  , size:4, lat:12, alt:3, repeat: { tally:6, lat:1, alt:7 } }
              , late_r_6:  { src:'airport-f-1-plane-underside-512.png'
                  , size:4, lat:-12, alt:3, repeat: { tally:6, lat:-1, alt:7 }, lon:-3.5 }
-             , late_c_6:  { src:'airport-f-1-plane-underside-512.png', size:40, alt:9, lon:2 }
+             , late_c_6:  { src:'airport-f-1-plane-underside-512.png', size:40, alt:20, lon:2 }
 
              , late_l_7:  { src:'airport-f-1-plane-underside-512.png'
-                 , size:9, lat:4, repeat: { tally:3, lat:1, lon:-3, alt:10 } }
+                 , size:9, lat:10, alt:10, repeat: { tally:3, lat:1, lon:-3, alt:10 } }
              , late_r_7:  { src:'airport-f-1-plane-underside-512.png'
-                 , size:9, lat:-4, repeat: { tally:3, lat:-1, lon:-3, alt:10 }, lon:-3.5 }
+                 , size:9, lat:-10, alt:10, repeat: { tally:3, lat:-1, lon:-3, alt:10 }, lon:-3.5 }
+             , late_c_7:  { src:'airport-f-7-refuel-left-512.png', size:15, lat:12, lon:-8, alt:-0.5
+                 , animate: { begin:248.3, end:250, lat:0 } }
+
+               //// Coins
+             , late_l_8:  { src:'airport-g-2-coin-128.png'
+                 , size:4, lat:2, alt:3, repeat: { tally:12, lat:1, alt:8 } }
+             , late_r_8:  { src:'airport-g-2-coin-128.png'
+                 , size:4, lat:-2, alt:3, repeat: { tally:12, lat:-1, alt:8 }, lon:-3.5 }
+             , late_c_8:  { src:'airport-g-2-coin-128.png'
+                 , size:8, lon:-2, alt:10, repeat: { tally:7, alt:10, lon:-2 } }
+
+             , conclude_l_0: { src:'airport-g-2-coin-128.png'
+                 , size:3, lat:4, alt:3, repeat: { tally:12, lat:2, alt:8 } }
+             , conclude_r_0: { src:'airport-g-2-coin-128.png'
+                 , size:3, lat:-4, alt:3, repeat: { tally:12, lat:-2, alt:8 }, lon:-2 }
+
+               //// Another ineup of low-cost planes.
+             , conclude_l_1: { src:'airport-a-2-ryanair-parked-1024.png'
+                 , size:40, lat: 7, repeat:{ tally:4, lon:-12 }, lon:0, alt:0.5 }
+             , conclude_r_1: { src:'airport-a-1-easyjet-parked-1024.png'
+                 , size:33, lat:-7, repeat:{ tally:4, lon:-12 }, lon:-2, alt:0.5 }
 
                //// Ground crew.
-             , late_c_7:  { src:'airport-f-4-baggage-512.png', size:10, alt:-1.3 }
-
-             , late_l_8:  { src:'airport-f-5-fire-512.png', lat:6 }
-             , late_r_8:  { src:'airport-f-5-fire-512.png', lat:-6, FLIP }
+             // , conclude_l_1:  { src:'airport-f-5-fire-512.png', lat:6 }
+             // , conclude_r_1:  { src:'airport-f-5-fire-512.png', lat:-6, FLIP }
+             // , conclude_l_1:  { src:'airport-f-5-fire-512.png', lat:6 }
+             // , conclude_r_1:  { src:'airport-f-5-fire-512.png', lat:-6, FLIP }
+             // , conclude_c_1:  { src:'airport-f-4-baggage-512.png', size:10, alt:-1.3, lon:-1 }
 
              // , late_l_A:  { src:'airport-f-7-refuel-left-512.png', size:25, lat:3 }
-             // , late_l_A:  { src:'airport-f-8-refuel-right-512.png', size:20, alt:-2, FLIP, }
-             // , late_r_A:  { src:'airport-f-8-refuel-right-512.png', size:25, lat:-3, alt:-2.5 }
-
+             // , conclude_l_2:  { src:'airport-f-8-refuel-right-512.png', size:20, alt:-2, FLIP }
+             // , conclude_r_2:  { src:'airport-f-8-refuel-right-512.png', size:25, lat:-3, alt:-2.5 }
+             //
              // , late_r_B:  { src:'airport-f-7-refuel-left-512.png', size:20, FLIP }
 
                //// Ground crew.
-             , conclude_c_0:  { src:'airport-g-1-airship-512.png', size:25 }
+             , conclude_c_3:  { src:'airport-g-1-airship-512.png', size:40, alt:-30
+                 , animate: { begin:236, end:270, alt:10 } } // begin/end are camera-longitudes
 
 
             }

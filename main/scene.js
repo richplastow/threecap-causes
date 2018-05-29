@@ -5,8 +5,11 @@ import state from  './state.js'
 
 const
 
+    //// DOM Elements.
+    $audio = document.querySelector('audio')
+
     //// Objects for rendering.
-    clock = new THREE.Clock()
+  , clock = new THREE.Clock()
   , scene = new THREE.Scene()
   , camera = new THREE.PerspectiveCamera(
         35, config.previewWidth/config.previewHeight, 10, 300)
@@ -17,6 +20,7 @@ const
     //// Object3Ds.
   , titleMeshes = []
   , cutoutMeshes = []
+  , animations = []
   , vidscreens = []
 
     //// Lights.
@@ -24,7 +28,7 @@ const
 
       //// Geometry.
   , earthGeometry = new THREE.SphereGeometry(100, 100, 100, 32)
-  , hingeGeometry = new THREE.BoxGeometry(1, 40, 1)
+  , hingeGeometry = new THREE.BoxGeometry(1, 40, 1) // only when showing hinges
 
     //// Textures - for fast development:
   , earthMap = THREE.ImageUtils.loadTexture('images/512_earth_daymap.jpg')
@@ -55,7 +59,7 @@ const
       // , specular: new THREE.Color('grey')
     })
 
-  , hingeMaterial = new THREE.MeshBasicMaterial({
+  , hingeMaterial = new THREE.MeshBasicMaterial({ // only when showing hinges
         color: 0x00ff00
       , transparent: true
       , opacity: config.showHinges ? 1 : 0
@@ -136,7 +140,9 @@ scene.fog = new THREE.Fog(
 
 let module; export default module = {
 
-    copyPass
+    $audio
+
+  , copyPass
   , renderer
   , composer
   , clock
@@ -145,6 +151,7 @@ let module; export default module = {
 
   , titleMeshes
   , cutoutMeshes
+  , animations
   , vidscreens
 
     //// Sets up the scene - should be called only once.
@@ -166,7 +173,7 @@ let module; export default module = {
         document.body.appendChild(renderer.domElement)
 
         scene.add(earthMesh)
-        scene.add(cubeMesh)
+        // scene.add(cubeMesh)
 
         //// Create all of the causes’ titles.
         createTitles(config.causes, titleMeshes, scene)
@@ -184,26 +191,65 @@ let module; export default module = {
             if ('capture' === state.currMode) return // only render once a second
         else
             state.prevNow = ~~now // a new second!
-/*
-        //// Show dots at the correct moment and update the year-text.
-        const nowFraction = now / state.currDuration * 1000
-        for (let i=0; i<sprites.length; i++) {
-            const sprite = sprites[i]
-            if (nowFraction > sprite.showAtFraction && ! sprite.visible) {
-                sprite.visible = true
-                if (state.firstText !== sprite.year) {
-                    state.firstText = sprite.year
-                    window.updateFirstText(sprite.year)
-                    firstTextSpriteMaterial.map.needsUpdate = true
-                }
-            }
-        }
 
-*/
-        titleMeshes.forEach( title => {
-            // title.rotation.y -= 0.01
+        // const nowFraction = now / state.currDuration * 1000
+
+        //// Update any special animations.
+        const camLon =
+            (state.cameraCurrent.position.lon + config.camLonOffset) % 360
+document.title = (~~(camLon*10)) / 10
+        animations.forEach( animation => {
+            const
+                { cause, place, cutout, hingeMesh, cutoutMesh } = animation
+              , { animate } = cutout
+              , { begin, end } = animate
+              , size = cutout.size || 15 // 15 by default
+            // if (camLon < begin || camLon > end) return // not currently animating
+
+
+            ////
+            const
+                fraction = Math.max(0, Math.min(1, (camLon - begin) / (end - begin) ) )
+
+              , beginLat = cutout.lat || 0
+              , endLat   = (null == animate.lat ? beginLat : animate.lat || 0)
+              , deltaLat = endLat - beginLat
+              , lat      = beginLat + (deltaLat * fraction)
+
+              , beginLon = cutout.lon || 0
+              , endLon   = (null == animate.lon ? beginLon : animate.lon || 0)
+              , deltaLon = endLon - beginLon
+              , lon      = beginLon + (deltaLon * fraction)
+
+              , beginAlt = cutout.alt || 0
+              , endAlt   = (null == animate.alt ? beginAlt : animate.alt || 0)
+              , deltaAlt = endAlt - beginAlt
+              , alt      = beginAlt + (deltaAlt * fraction)
+
+            //// Update the hinge’s position and rotation.
+            updateHinge(
+                hingeMesh
+              , 0 // the camera travels along the equator
+                  + place.lat // apply the place’s latitude...
+                  + lat // apply the animation modifier
+              , cause.titleLon // based on the cause’s (absolute) title-longitude
+                  + place.lon // apply the place’s relative-longitude...
+                  + lon // apply the animation modifier
+              , 100 // the Earth’s radius, so, ground-level
+                  + size/2 // the cutout’s bottom edge sits on the ground
+                  + alt // apply the animation modifier
+            )
+
         })
-        // cubeMesh.rotation.y -= 0.01
+        //
+        // //// Reset audio at the end of the animation.
+        // if (0.999 <= nowFraction && state.audio === 'playing') {
+        //     scene.$audio.pause()
+        //     scene.$audio.fastSeek(0)
+        //     state.audio = 'stopped'
+        // }
+
+
         TWEEN.update(now * 1000) // convert seconds to ms
         renderer.clear()
         composer.render()
@@ -229,7 +275,10 @@ function createTitles (causes, titleMeshes, scene) {
               // , side: THREE.DoubleSide
             })
           , titleMesh = new THREE.Mesh(titleGeometry, titleMaterial)
-          , hingeMesh = new THREE.Mesh(hingeGeometry, hingeMaterial)
+          , hingeMesh = new (
+                config.showHinges ? THREE.Mesh : THREE.Object3D
+            )(hingeGeometry, hingeMaterial) // args ignored by Object3D
+          // , hingeMesh = new THREE.Mesh(hingeGeometry, hingeMaterial)
 
         //// Show the correct part of the spritesheet.
         titleTexture.repeat.set(1, 0.125) // scale x8 vertically
@@ -283,7 +332,9 @@ function createCutouts (causes, cutoutMeshes, scene) {
             for (let j=0; j<repeatTally; j++) {
                 const
                     cutoutMesh = new THREE.Mesh(cutoutGeometry, cutoutMaterial)
-                  , hingeMesh = new THREE.Mesh(hingeGeometry, hingeMaterial)
+                  , hingeMesh = new (
+                        config.showHinges ? THREE.Mesh : THREE.Object3D
+                    )(hingeGeometry, hingeMaterial) // args ignored by Object3D
 
                 if (! place) console.error(`No such place '${placeName}'`, Object.keys(config.places))
 
@@ -316,6 +367,13 @@ function createCutouts (causes, cutoutMeshes, scene) {
                 //// Add the hinge+cutout to the scene, and record the cutout-mesh.
                 scene.add(hingeMesh)
                 cutoutMeshes.push(cutoutMesh)
+                if (cutout.animate) animations.push({
+                    cause
+                  , place
+                  , cutout
+                  , hingeMesh
+                  , cutoutMesh
+                })
 
                 //// Only shown when the current cause is being previewed or captured.
                 cutoutMesh.visible = false

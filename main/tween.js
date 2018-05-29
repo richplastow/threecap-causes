@@ -30,18 +30,17 @@ const tweenDefs = [
               , start    = cause.camStartLon
               , seeTitle = cause.titleLon - 40
               , pause    = cause.titleLon + (cause.camEndLon-cause.titleLon) / 2
-              , conclude = cause.camEndLon - 50
+              , conclude = cause.camEndLon - 40
               , end      = cause.camEndLon
-              , stick    = config.stick
 
-            tweenDefs[1].beginState.lon = stick || start
-            tweenDefs[1].endState.lon   = stick || seeTitle
-            tweenDefs[2].beginState.lon = stick || seeTitle
-            tweenDefs[2].endState.lon   = stick || pause
-            tweenDefs[3].beginState.lon = stick || pause
-            tweenDefs[3].endState.lon   = stick || conclude
-            tweenDefs[4].beginState.lon = stick || conclude
-            tweenDefs[4].endState.lon   = stick || end
+            tweenDefs[1].beginState.lon = config.stick || start
+            tweenDefs[1].endState.lon   = config.stick || seeTitle
+            tweenDefs[2].beginState.lon = config.stick || seeTitle
+            tweenDefs[2].endState.lon   = config.stick || pause
+            tweenDefs[3].beginState.lon = config.stick || pause
+            tweenDefs[3].endState.lon   = config.stick || conclude
+            tweenDefs[4].beginState.lon = config.stick || conclude
+            tweenDefs[4].endState.lon   = config.stick || end
 
             state.cameraCurrent.position.lat = tweenDefs[1].beginState.lat
             state.cameraCurrent.position.lon = tweenDefs[1].beginState.lon
@@ -82,11 +81,18 @@ const tweenDefs = [
       , currState:  {}
       , endState:   { lat:0, lon:null } // `lon` set in `tweenDefs[0].onReset()`
       , beginFrac:  0.1
-      , endFrac:    0.44
+      , endFrac:    0.35
       , tween:      null
       , easing:     TWEEN.Easing.Quadratic.InOut
       , onReset:    function (def) {}
       , onUpdate:   function (def) { return function () {
+
+            //// Start the audio, if it’s not playing
+            if ('playing' !== state.audio) {
+                state.audio = 'playing'
+                scene.$audio.play(0)
+            }
+
             const camPos = state.cameraCurrent.position
             camPos.lat = def.currState.lat
             camPos.lon = def.currState.lon
@@ -97,10 +103,10 @@ const tweenDefs = [
         beginState: { lat:0, lon:null } // `lon` set in `tweenDefs[0].onReset()`
       , currState:  {}
       , endState:   { lat:0, lon:null } // `lon` set in `tweenDefs[0].onReset()`
-      , beginFrac:  0.46
-      , endFrac:    0.9
+      , beginFrac:  0.35
+      , endFrac:    0.6
       , tween:      null
-      , easing:     TWEEN.Easing.Quadratic.InOut
+      , easing:     TWEEN.Easing.Cubic.InOut
       , onReset:    function (def) {}
       , onUpdate:   function (def) { return function () {
             const camPos = state.cameraCurrent.position
@@ -113,7 +119,7 @@ const tweenDefs = [
         beginState: { lat:0, lon:null } // `lon` set in `tweenDefs[0].onReset()`
       , currState:  {}
       , endState:   { lat:0, lon:null } // `lon` set in `tweenDefs[0].onReset()`
-      , beginFrac:  0.9
+      , beginFrac:  0.6
       , endFrac:    1.0
       , tween:      null
       , easing:     TWEEN.Easing.Cubic.In

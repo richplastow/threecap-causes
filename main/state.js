@@ -15,4 +15,5 @@ let module; export default module = {
         }
     }
   , cause: null
+  , audio: 'stopped'
 }
