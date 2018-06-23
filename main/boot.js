@@ -54,6 +54,7 @@ function restartForPreview (evt) {
     }
 
     //// Reset audio.
+    scene.$audio.src = `audio/causes-${state.cause}.mp3`
     scene.$audio.pause()
     scene.$audio.fastSeek(0)
     state.audio = 'stopped'

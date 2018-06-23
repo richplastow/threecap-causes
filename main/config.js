@@ -154,10 +154,6 @@ const
 
   , causes = [
         {
-            title: 'Bucket Lists'
-          , previewDuration: 5000 // in ms
-        }
-      , {
             title: 'Cheap Flights'
           , previewDuration: 3000 // in ms
           , cutouts: {
@@ -288,7 +284,11 @@ const
             }
         }
       , {
-            title: 'Cruise Ships'
+            title: 'Bucket Lists'
+          , previewDuration: 5000 // in ms
+        }
+      , {
+            title: 'Cruise Liners'
           , previewDuration: 8000 // in ms
         }
       , {

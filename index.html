@@ -95,7 +95,7 @@
       ctx.clearRect(0,0,2048,2048)
       titles.forEach( (title,i) => {
           const
-              text = `${i}. ${title.toUpperCase()}` //@TODO return to `i+1`
+              text = `${i+1}. ${title.toUpperCase()}` //@TODO return to `i+1`
             , metrics = ctx.measureText(text)
           ctx.fillText(text, (2048-metrics.width)/2, 256*i+128)
       })
@@ -109,7 +109,7 @@
 
 <!-- AUDIO -->
 
-<audio src="audio/cheap-flights-voiceover.mp3" controls></audio>
+<audio src="audio/causes-0.mp3" controls></audio>
 
 
 
