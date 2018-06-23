@@ -29,6 +29,14 @@ function restart () {
     scene.clock.stop()
     tween.reset()
     scene.clock.start() // reset `clock.elapsedTime` to zero
+
+    //// Reset coin altitudes after the ‘drop’ animation.
+    scene.coins.forEach( coin => {
+        coin.currAlt = coin.origAlt
+        const { hingeMesh, origLat, origLon, origAlt } = coin
+        scene.updateHinge(hingeMesh, origLat, origLon, origAlt)
+    })
+
 }
 
 

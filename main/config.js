@@ -2,7 +2,7 @@
 
 const
     stick = 0//247.9 // set to a longitude, to freeze the camera at that position
-  , camLonOffset = 0 // set to a longitude to start the camera at that position
+  , camLonOffset = 0 //280 set to a longitude to start the camera at that position
   , showHinges = false
 
     //// Dimensions, framerate, duration.
@@ -202,12 +202,12 @@ const
                  , animate: { begin:143, end:152, lat:-35, lon:5, alt:4 } }
 
                //// Multiplying planes.
+             , late_c_0:  { src:'airport-f-1-plane-underside-512.png'
+                 , size:99, alt:-99, animate: { begin:145, end:160, alt:80 } }
              , late_l_1:  { src:'airport-f-1-plane-underside-512.png'
                  , size:10, repeat: { tally:4, lat:3, lon:-3, alt:3 } }
              , late_r_1:  { src:'airport-f-1-plane-underside-512.png'
                  , size:10, repeat: { tally:4, lat:-3, lon:-3, alt:3 } }
-             , late_c_0:  { src:'airport-f-1-plane-underside-512.png'
-                 , size:99, alt:-99, animate: { begin:145, end:160, alt:80 } }
 
              , late_l_3:  { src:'airport-f-1-plane-underside-512.png'
                  , size:7, lat:5, repeat: { tally:4, lat:3, lon:-3, alt:3 } }
@@ -241,6 +241,14 @@ const
                  , animate: { begin:248.3, end:250, lat:0 } }
 
                //// Coins
+             , late_l_2:  { src:'airport-g-2-coin-128.png'
+                 , size:3, lat:-2, lon:50, alt:1, repeat: { tally:6, alt:5, lat:1 } }
+             , late_r_2:  { src:'airport-g-2-coin-128.png'
+                 , size:3, lat:2, lon:46, alt:1, repeat: { tally:6, alt:5, lat:-1 } }
+             , late_c_2:  { src:'airport-g-2-coin-128.png'
+                 , size:3, lat:0, lon:41, alt:1, repeat: { tally:6, alt:5 } }
+
+
              , late_l_8:  { src:'airport-g-2-coin-128.png'
                  , size:4, lat:2, alt:3, repeat: { tally:12, lat:1, alt:8 } }
              , late_r_8:  { src:'airport-g-2-coin-128.png'

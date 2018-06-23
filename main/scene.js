@@ -21,6 +21,7 @@ const
   , titleMeshes = []
   , cutoutMeshes = []
   , animations = []
+  , coins = []
   , vidscreens = []
 
     //// Lights.
@@ -152,7 +153,9 @@ let module; export default module = {
   , titleMeshes
   , cutoutMeshes
   , animations
+  , coins
   , vidscreens
+  , updateHinge
 
     //// Sets up the scene - should be called only once.
   , init () {
@@ -241,15 +244,16 @@ document.title = (~~(camLon*10)) / 10
             )
 
         })
-        //
-        // //// Reset audio at the end of the animation.
-        // if (0.999 <= nowFraction && state.audio === 'playing') {
-        //     scene.$audio.pause()
-        //     scene.$audio.fastSeek(0)
-        //     state.audio = 'stopped'
-        // }
 
+        //// ‘Massive tax breaks’ coins drop.
+        if (camLon > 247.85 && camLon < 250)
+            coins.forEach( coin => {
+                coin.currAlt -= ((camLon - 247.85) * 4)
+                const { hingeMesh, origLat, origLon, currAlt } = coin
+                updateHinge(hingeMesh, origLat, origLon, currAlt)
+            })
 
+        ////
         TWEEN.update(now * 1000) // convert seconds to ms
         renderer.clear()
         composer.render()
@@ -345,24 +349,28 @@ function createCutouts (causes, cutoutMeshes, scene) {
                 //// Apply ‘FLIP’.
                 if (cutout.FLIP) cutoutMesh.scale.x = -1
 
-                //// Place the hinge in the correct location, and rotate it to be
-                //// perpendicular to the ground (`- 0.3` to appear straight).
-                updateHinge(
-                    hingeMesh
-                  , 0 // the camera travels along the equator
+                const
+                    origLat = // the camera travels along the equator
+                        0
                       + place.lat // apply the place’s latitude...
                       + (cutout.lat || 0) // ...and the cutout’s modifier
                       + (j*repeatLat) // ...and this repeat’s latitude-gap
-                  , cause.titleLon // based on the cause’s (absolute) title-longitude
+                  , origLon =
+                        cause.titleLon // based on the cause’s (absolute) title-longitude
                       + place.lon // apply the place’s relative-longitude...
                       + (cutout.lon || 0) // ...and the cutout’s modifier
                       + (j*repeatLon) // ...and this repeat’s longitude-gap
                       // + (i/2) //@TODO fix flicker better
-                  , 100 // the Earth’s radius, so, ground-level
+                  , origAlt =
+                        100 // the Earth’s radius, so, ground-level
                       + size/2 // the cutout’s bottom edge sits on the ground
                       + (cutout.alt || 0) // apply the cutout’s modifier...
                       + (j*repeatAlt) // ...and this repeat’s altitude-gap
-                )
+
+                //// Place the hinge in the correct location, and rotate it to be
+                //// perpendicular to the ground (`- 0.3` to appear straight).
+                updateHinge(hingeMesh, origLat, origLon, origAlt)
+
     // console.log(cutout.src, place.relLon, ~~hingeMesh.position.x, ~~hingeMesh.position.y, ~~hingeMesh.position.z);
                 //// Add the hinge+cutout to the scene, and record the cutout-mesh.
                 scene.add(hingeMesh)
@@ -378,6 +386,10 @@ function createCutouts (causes, cutoutMeshes, scene) {
                 //// Only shown when the current cause is being previewed or captured.
                 cutoutMesh.visible = false
                 cutoutMesh.causeIndex = i
+
+                //// Special ‘coin drop’ animation.
+                if ( 'airport-g-2-coin-' === cutout.src.slice(0,17) )
+                    coins.push({ hingeMesh, origLat, origLon, origAlt, currAlt:origAlt })
             }
         }
     })
