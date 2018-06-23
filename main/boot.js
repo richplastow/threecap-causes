@@ -1,7 +1,13 @@
 import config from './config.js'
 import scene from './scene.js'
 import state from './state.js'
-import tween from './tween.js'
+import tween_0 from './tween-0.js'
+import tween_1 from './tween-1.js'
+
+const tween = [
+    tween_0
+  , tween_1
+]
 
 
 export function boot() {
@@ -27,7 +33,7 @@ export function boot() {
 //// Resets the scene state and zeros the timer.
 function restart () {
     scene.clock.stop()
-    tween.reset()
+    tween[state.cause].reset()
     scene.clock.start() // reset `clock.elapsedTime` to zero
 
     //// Reset coin altitudes after the ‘drop’ animation.
@@ -42,13 +48,13 @@ function restart () {
 
 //// Restarts the scene for development and previewing.
 function restartForPreview (evt) {
-    const { previewWidth, previewHeight, previewDuration, previewFps
+    const { previewWidth, previewHeight, previewFps
       , pixelRatio } = config
+    state.currDuration = config.causes[state.cause].previewDuration
     if ('preview' !== state.currMode) {
         state.currMode = 'preview'
         scene.copyPass.renderToScreen = true
         state.currFps = previewFps
-        state.currDuration = previewDuration
         scene.renderer.setSize(previewWidth, previewHeight)
         scene.composer.setSize(previewWidth * pixelRatio, previewHeight * pixelRatio)
     }
@@ -65,13 +71,13 @@ function restartForPreview (evt) {
 
 //// Restarts the scene for capture.
 function restartForCapture () {
-    const { captureWidth, captureHeight, captureDuration, captureFps
+    const { captureWidth, captureHeight, previewFps, captureFps
       , pixelRatio, showDuringCapture } = config
+    state.currDuration = config.causes[state.cause].previewDuration * (previewFps / captureFps)
     if ('capture' !== state.currMode) {
         state.currMode = 'capture'
         scene.copyPass.renderToScreen = showDuringCapture
         state.currFps = captureFps
-        state.currDuration = captureDuration
         scene.renderer.setSize(captureWidth, captureHeight)
         scene.composer.setSize(captureWidth * pixelRatio, captureHeight * pixelRatio)
     }

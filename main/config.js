@@ -155,7 +155,7 @@ const
   , causes = [
         {
             title: 'Cheap Flights'
-          , previewDuration: 3000 // in ms
+          , previewDuration: 30000 // in ms
           , cutouts: {
 
                //// Lineup of low-cost planes.
@@ -257,7 +257,7 @@ const
              , conclude_r_0: { src:'airport-g-2-coin-128.png'
                  , size:3, lat:-4, alt:3, repeat: { tally:12, lat:-2, alt:8 }, lon:-2 }
 
-               //// Another ineup of low-cost planes.
+               //// Another lineup of low-cost planes.
              , conclude_l_1: { src:'airport-a-2-ryanair-parked-1024.png'
                  , size:40, lat: 7, repeat:{ tally:4, lon:-12 }, lon:0, alt:0.5 }
              , conclude_r_1: { src:'airport-a-1-easyjet-parked-1024.png'
@@ -284,8 +284,46 @@ const
             }
         }
       , {
-            title: 'Bucket Lists'
-          , previewDuration: 5000 // in ms
+            title: 'Travel Writing'
+          , previewDuration: 47500 // in ms
+          , cutouts: {
+
+               //// Tower Bridge to Taj Mahal.
+               early_l_2: { src:'bucket-1-g-tower-bridge-512.png', size:40, alt:-3, lat:-4 }
+             , early_r_4: { src:'bucket-1-d-pisa-512.png', size:40, alt:-2, lat:2 }
+             , early_l_6: { src:'bucket-1-c-incas-512.png', size:40, alt:-3 }
+             , early_r_8: { src:'bucket-1-f-taj-512.png', size:40, alt:-2, lat:4 }
+
+
+               //// Great Wall.
+             , late_r_0: { src:'bucket-3-a-queue-512.png', size:20, alt:-0.3, lon:1, lat:5 }
+             , late_c_0: { src:'bucket-1-b-great-wall-512.png', size:20, alt:-1 }
+
+               //// Safari.
+             , late_r_1: { src:'bucket-2-a-zebra-512.png'
+                 , size:8, lat:0, alt:-0.5, repeat: { tally:6, lon:9, lat:3 } }
+             , late_l_2: { src:'bucket-2-a-zebra-512.png'
+                 , size:10, lat:0, alt:-0.5, repeat: { tally:6, lon:10, lat:-5 } }
+             , late_r_3: { src:'bucket-2-b-giraffe-512.png'
+                 , size:15, lat:0, lon:5, alt:-0.5, repeat: { tally:3, lon:17, lat:4 } }
+             , late_l_4: { src:'bucket-2-c-safari-512.png'
+                 , size:10, lat:4, lon:-0.5, alt:-1, repeat: { tally:2, lon:17, lat:-5 } }
+             , late_r_5: { src:'bucket-2-d-long-512.png'
+                 , size:20, lat:-5, alt:-0.5, repeat: { tally:2, lon:15, lat:3 } }
+
+             // , late_r_7: { src:'bucket-2-a-zebra-512.png', size:20, alt:-1 }
+             // , late_l_8: { src:'bucket-2-b-giraffe-512.png', size:20, alt:-1 }
+
+               //// City.
+             , late_c_8: { src:'bucket-3-a-queue-512.png'
+                 , size:20, alt:-1, repeat: { tally:4, lon:1, lat:5, alt:-1 } }
+             , late_r_8: { src:'bucket-3-a-queue-512.png'
+                 , size:14, lat:4, alt:-1, repeat: { tally:4, lon:3, lat:-4, alt:-0.5 } }
+             , conclude_l_0: { src:'bucket-3-a-queue-512.png'
+                 , size:40, lat:-13, alt:-4, repeat: { tally:2, lon:3, lat:-4, alt:-0.5 } }
+             , conclude_r_0: { src:'bucket-1-a-eiffel-512.png', size:40, alt:-3 }
+
+            }
         }
       , {
             title: 'Cruise Liners'
@@ -305,8 +343,8 @@ const
 //// Fill in causes `captureDuration`s
 causes.forEach( (cause,i) => {
     cause.captureDuration = cause.previewDuration * (previewFps / captureFps)
-    cause.titleLon    = i       * 360 / ts
     cause.camStartLon = (i-0.2) * 360 / ts // the title just over the horizon
+    cause.titleLon    = i       * 360 / ts
     cause.camEndLon   = (i+0.8) * 360 / ts
 })
 
