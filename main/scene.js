@@ -250,7 +250,7 @@ document.title = (~~(camLon*10)) / 10
         //// ‘Massive tax breaks’ coins drop.
         if (camLon > 247.85 && camLon < 250)
             coins.forEach( coin => {
-                coin.currAlt -= ((camLon - 247.85) * 4)
+                coin.currAlt -= ((camLon - 247.85) * 0.5)
                 const { hingeMesh, origLat, origLon, currAlt } = coin
                 updateHinge(hingeMesh, origLat, origLon, currAlt)
             })
