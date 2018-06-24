@@ -159,20 +159,20 @@ const
           , cutouts: {
 
                //// Lineup of low-cost planes.
-               early_l_0: { src:'airport-a-1-easyjet-parked-1024.png'
+               early_l_0: { src:'airport-a-1-easyjet-parked-2048.png'
                  , size:30, lat: 5, repeat:{ tally:6, lon:6 } }
-             , early_r_0: { src:'airport-a-2-ryanair-parked-1024.png'
+             , early_r_0: { src:'airport-a-2-ryanair-parked-2048.png'
                  , size:30, lat:-5, repeat:{ tally:6, lon:6 }, lon:-2 }
 
                //// UK and Euro Airport signs.
-             , early_l_5: { src:'airport-b-1-stansted-512.png', size:25, lat:2, alt:-1 }
+             , early_l_5: { src:'airport-b-1-stansted-1024.png', size:25, lat:2, alt:-1 }
              , early_r_6: { src:'airport-b-2-east-midlands-1024.png', size:25, lat:-5, lon:-1, alt:-3 }
-             , early_r_7: { src:'airport-b-3-luton-512.png', size:25, lat:-3 }
-             , early_l_9: { src:'airport-b-4-glasgow-512.png', size:30, lat:7 }
-             , early_l_A: { src:'airport-c-2-malaga-512.png', size:25, lat:-4, alt:9 }
-             , early_r_B: { src:'airport-c-5-venice-512.png', size:35, lat:-9 }
+             , early_r_7: { src:'airport-b-3-luton-1024.png', size:25, lat:-3 }
+             , early_l_9: { src:'airport-b-4-glasgow-1024.png', size:30, lat:7 }
+             , early_l_A: { src:'airport-c-2-malaga-1024.png', size:25, lat:-4, alt:9 }
+             , early_r_B: { src:'airport-c-5-venice-1024.png', size:35, lat:-9 }
              , early_l_C: { src:'airport-c-4-rome-1024.png', size:30, alt:3, lat:5 }
-             , early_r_C: { src:'airport-c-3-barcelona-512.png' }
+             , early_r_C: { src:'airport-c-3-barcelona-1024.png' }
              // , early_l_D: { src:'airport-c-1-mallorca-512.png' } //@TODO use this?
              , early_r_D: { src:'airport-c-6-amsterdam-1024.png', size:25, alt:8 }
              , early_l_D: { src:'airport-d-1-terminal2-1024.png', alt:6 }
@@ -194,58 +194,58 @@ const
                  , animate: { begin:144.3, end:145, alt:-30, lon:-1 } }
 
                //// “...free flights...”
-             , pause_l_5: { src:'airport-a-2-ryanair-parked-1024.png', size:99, lat:30, alt:-10
+             , pause_l_5: { src:'airport-a-2-ryanair-parked-2048.png', size:99, lat:30, alt:-10
                  , animate: { begin:143, end:152, lat:-35, lon:5, alt:4 } }
 
                //// Multiplying planes.
-             , late_c_0:  { src:'airport-f-1-plane-underside-512.png'
+             , late_c_0:  { src:'airport-f-1-plane-underside-2048.png'
                  , size:99, alt:-99, animate: { begin:145, end:160, alt:80 } }
-             , late_l_1:  { src:'airport-f-1-plane-underside-512.png'
+             , late_l_1:  { src:'airport-f-1-plane-underside-2048.png'
                  , size:10, repeat: { tally:4, lat:3, lon:-3, alt:3 } }
-             , late_r_1:  { src:'airport-f-1-plane-underside-1024.png'
+             , late_r_1:  { src:'airport-f-1-plane-underside-2048.png'
                  , size:10, repeat: { tally:4, lat:-3, lon:-3, alt:3 } }
 
-             , late_l_3:  { src:'airport-f-1-plane-underside-1024.png'
+             , late_l_3:  { src:'airport-f-1-plane-underside-2048.png'
                  , size:7, lat:5, repeat: { tally:4, lat:3, lon:-3, alt:3 } }
-             , late_r_3:  { src:'airport-f-1-plane-underside-1024.png'
+             , late_r_3:  { src:'airport-f-1-plane-underside-2048.png'
                  , size:7, lat:-5, repeat: { tally:4, lat:-3, lon:-3, alt:3 } }
 
-             , late_l_4:  { src:'airport-f-1-plane-underside-1024.png'
+             , late_l_4:  { src:'airport-f-1-plane-underside-2048.png'
                  , size:5, lat:7, repeat: { tally:4, lat:-3, lon:-3, alt:3 } }
-             , late_r_4:  { src:'airport-f-1-plane-underside-1024.png'
+             , late_r_4:  { src:'airport-f-1-plane-underside-2048.png'
                  , size:5, lat:-7, repeat: { tally:4, lat:3, lon:-3, alt:3 }, lon:-3.5 }
-             , late_c_4:  { src:'airport-f-1-plane-underside-1024.png', size:7, lon:-6, alt:25 }
+             , late_c_4:  { src:'airport-f-1-plane-underside-2048.png', size:7, lon:-6, alt:25 }
 
-             , late_l_5:  { src:'airport-f-1-plane-underside-1024.png'
+             , late_l_5:  { src:'airport-f-1-plane-underside-2048.png'
                  , size:4, lat:7, repeat: { tally:6, alt:7 } }
-             , late_r_5:  { src:'airport-f-1-plane-underside-1024.png'
+             , late_r_5:  { src:'airport-f-1-plane-underside-2048.png'
                  , size:4, lat:-7, repeat: { tally:6, alt:7 }, lon:-3.5 }
-             , late_c_5:  { src:'airport-f-7-refuel-left-1024.png', size:15, lat:-12, lon:22.5, alt:-0.7, FLIP
+             , late_c_5:  { src:'airport-f-7-refuel-left-flip-1024.png', size:15, lat:-12, lon:22.5, alt:-0.7
                  , animate: { begin:248.2, end:249.5, lat:-2 } } // back
 
-             , late_l_6:  { src:'airport-f-1-plane-underside-1024.png'
+             , late_l_6:  { src:'airport-f-1-plane-underside-2048.png'
                  , size:4, lat:12, alt:3, repeat: { tally:6, lat:1, alt:7 } }
-             , late_r_6:  { src:'airport-f-1-plane-underside-1024.png'
+             , late_r_6:  { src:'airport-f-1-plane-underside-2048.png'
                  , size:4, lat:-12, alt:3, repeat: { tally:6, lat:-1, alt:7 }, lon:-3.5 }
-             , late_c_6:  { src:'airport-f-1-plane-underside-1024.png', size:40, alt:20, lon:2 }
+             , late_c_6:  { src:'airport-f-1-plane-underside-2048.png', size:40, alt:20, lon:2 }
 
-             , late_l_7:  { src:'airport-f-1-plane-underside-1024.png'
+             , late_l_7:  { src:'airport-f-1-plane-underside-2048.png'
                  , size:9, lat:10, alt:10, repeat: { tally:3, lat:1, lon:-3, alt:10 } }
-             , late_r_7:  { src:'airport-f-1-plane-underside-1024.png'
+             , late_r_7:  { src:'airport-f-1-plane-underside-2048.png'
                  , size:9, lat:-10, alt:10, repeat: { tally:3, lat:-1, lon:-3, alt:10 }, lon:-3.5 }
              , late_c_7:  { src:'airport-f-7-refuel-left-1024.png', size:15, lat:12, lon:-8, alt:-0.5
                  , animate: { begin:248.3, end:250, lat:0 } }
 
                //// Coins
-             , late_l_2:  { src:'airport-g-2-coin-128.png'
+             , late_l_2:  { src:'airport-g-2-coin-256.png'
                  , size:3, lat:-2, lon:50, alt:1, repeat: { tally:6, alt:5, lat:1 } }
-             , late_r_2:  { src:'airport-g-2-coin-128.png'
+             , late_r_2:  { src:'airport-g-2-coin-256.png'
                  , size:3, lat:2, lon:46, alt:1, repeat: { tally:6, alt:5, lat:-1 } }
-             , late_c_2:  { src:'airport-g-2-coin-128.png'
+             , late_c_2:  { src:'airport-g-2-coin-256.png'
                  , size:3, lat:0, lon:41, alt:1, repeat: { tally:6, alt:5 } }
 
 
-             , late_l_8:  { src:'airport-g-2-coin-128.png'
+             , late_l_8:  { src:'airport-g-2-coin-256.png'
                  , size:4, lat:2, alt:3, repeat: { tally:12, lat:1, alt:8 } }
              , late_r_8:  { src:'airport-g-2-coin-512.png'
                  , size:4, lat:-2, alt:3, repeat: { tally:12, lat:-1, alt:8 }, lon:-3.5 }
@@ -258,9 +258,9 @@ const
                  , size:3, lat:-4, alt:3, repeat: { tally:12, lat:-2, alt:8 }, lon:-2 }
 
                //// Another lineup of low-cost planes.
-             , conclude_l_1: { src:'airport-a-2-ryanair-parked-1024.png'
+             , conclude_l_1: { src:'airport-a-2-ryanair-parked-2048.png'
                  , size:40, lat: 7, repeat:{ tally:4, lon:-12 }, lon:0, alt:0.5 }
-             , conclude_r_1: { src:'airport-a-1-easyjet-parked-1024.png'
+             , conclude_r_1: { src:'airport-a-1-easyjet-parked-2048.png'
                  , size:33, lat:-7, repeat:{ tally:4, lon:-12 }, lon:-2, alt:0.5 }
 
                //// Ground crew.
@@ -289,24 +289,24 @@ const
           , cutouts: {
 
                //// Tower Bridge to Taj Mahal.
-               early_l_2: { src:'bucket-1-g-tower-bridge-512.png', size:40, alt:-3, lat:-4 }
-             , early_r_4: { src:'bucket-1-d-pisa-512.png', size:40, alt:-2, lat:2 }
-             , early_l_6: { src:'bucket-1-c-incas-512.png', size:40, alt:-3 }
-             , early_r_8: { src:'bucket-1-f-taj-512.png', size:40, alt:-2, lat:4 }
+               early_l_2: { src:'bucket-1-g-tower-bridge-1024.png', size:40, alt:-3, lat:-4 }
+             , early_r_4: { src:'bucket-1-d-pisa-1024.png', size:40, alt:-2, lat:2 }
+             , early_l_6: { src:'bucket-1-c-incas-1024.png', size:40, alt:-3 }
+             , early_r_8: { src:'bucket-1-f-taj-1024.png', size:40, alt:-2, lat:4 }
 
 
                //// Great Wall.
-             , late_r_0: { src:'bucket-3-a-queue-512.png', size:20, alt:-0.3, lon:1, lat:5 }
-             , late_c_0: { src:'bucket-1-b-great-wall-512.png', size:20, alt:-1 }
+             , late_r_0: { src:'bucket-3-a-queue-1024.png', size:20, alt:-0.3, lon:1, lat:5 }
+             , late_c_0: { src:'bucket-1-b-great-wall-1024.png', size:20, alt:-1 }
 
                //// Safari.
              , late_r_1: { src:'bucket-2-a-zebra-512.png'
                  , size:8, lat:0, alt:-0.5, repeat: { tally:6, lon:9, lat:3 } }
              , late_l_2: { src:'bucket-2-a-zebra-512.png'
                  , size:10, lat:0, alt:-0.5, repeat: { tally:6, lon:10, lat:-5 } }
-             , late_r_3: { src:'bucket-2-b-giraffe-512.png'
+             , late_r_3: { src:'bucket-2-b-giraffe-1024.png'
                  , size:15, lat:0, lon:5, alt:-0.5, repeat: { tally:3, lon:17, lat:4 } }
-             , late_l_4: { src:'bucket-2-c-safari-512.png'
+             , late_l_4: { src:'bucket-2-c-safari-1024.png'
                  , size:10, lat:4, lon:-0.5, alt:-1, repeat: { tally:2, lon:17, lat:-5 } }
              , late_r_5: { src:'bucket-2-d-long-512.png'
                  , size:20, lat:-5, alt:-0.5, repeat: { tally:2, lon:15, lat:3 } }
@@ -315,25 +315,25 @@ const
              // , late_l_8: { src:'bucket-2-b-giraffe-512.png', size:20, alt:-1 }
 
                //// City.
-             , late_c_8: { src:'bucket-3-a-queue-512.png'
+             , late_c_8: { src:'bucket-3-a-queue-1024.png'
                  , size:20, alt:-1, repeat: { tally:4, lon:1, lat:5, alt:-1 } }
-             , late_r_8: { src:'bucket-3-a-queue-512.png'
+             , late_r_8: { src:'bucket-3-a-queue-1024.png'
                  , size:14, lat:4, alt:-1, repeat: { tally:4, lon:3, lat:-4, alt:-0.5 } }
-             , conclude_l_0: { src:'bucket-3-a-queue-512.png'
+             , conclude_l_0: { src:'bucket-3-a-queue-1024.png'
                  , size:40, lat:-13, alt:-4, repeat: { tally:2, lon:3, lat:-4, alt:-0.5 } }
-             , conclude_r_0: { src:'bucket-1-a-eiffel-512.png', size:40, alt:-3 }
+             , conclude_r_0: { src:'bucket-1-a-eiffel-1024.png', size:40, alt:-3 }
 
             }
         }
       , {
             title: 'Cruise Liners'
-          , previewDuration: 50000 // in ms
+          , previewDuration: 30000 // in ms
           , cutouts: {
 
                 //// Venice scene, from poster.
-                early_r_2: { src:'cruise-b-2-lads-512.png', size:12, lat:0, alt:-0.3 }
-              , early_l_2: { src:'cruise-b-1-it-couple-512.png', size:12, lon:5, lat:0, alt:-0.3 }
-              , early_r_3: { src:'cruise-b-3-lasses-512.png', size:14, lat:4, alt:-1 }
+                early_r_2: { src:'cruise-b-2-lads-1024.png', size:12, lat:0, alt:-0.3 }
+              , early_l_2: { src:'cruise-b-1-it-couple-1024.png', size:12, lon:5, lat:0, alt:-0.3 }
+              , early_r_3: { src:'cruise-b-3-lasses-1024.png', size:14, lat:4, alt:-1 }
 
 
               , early_l_3: { src:'cruise-a-3-lamp-512.png'
@@ -341,24 +341,25 @@ const
               , early_r_4: { src:'cruise-a-3-lamp-512.png'
                   , size:6.5, lat:2, alt:-0.5, repeat: { tally:2, lon:2, lat:2 } }
 
-              , early_l_4: { src:'cruise-c-1-hands-512.png', size:10, lat:-3, lon:-3, alt:-8
+              , early_l_4: { src:'cruise-c-1-hands-1024.png', size:10, lat:-3, lon:-3, alt:-8
                  , animate: { begin:35, end:40, alt:-0.5 } }
-              , early_r_5: { src:'cruise-c-3-hat-512.png', size:8, lat:2, lon:-15, alt:-8
+              , early_r_5: { src:'cruise-c-3-hat-1024.png', size:8, lat:2, lon:-15, alt:-8
                  , animate: { begin:35, end:40, alt:-0.5 } }
 
-              , early_l_7: { src:'bucket-3-a-queue-512.png'
+              , early_l_7: { src:'bucket-3-a-queue-1024.png'
                  , size:20, alt:-1, lon:-20, repeat: { tally:2, lon:-7, lat:-7 } }
 
-              , early_l_5: { src:'cruise-a-2-columns-512.png', size:20, alt:-1, lat:-5 }
-              , early_l_6: { src:'cruise-a-4-building-512.png', size:60, alt:0, lat:-25, lon:0 }
-              , early_r_6: { src:'cruise-a-1-ship-1024.png', size:140, alt:-3, lat:-25
+              , early_l_5: { src:'cruise-a-2-columns-1024.png', size:20, alt:-1, lat:-5 }
+              , early_l_6: { src:'cruise-a-4-building-1024.png', size:60, alt:0, lat:-25, lon:0 }
+              , early_r_6: { src:'cruise-a-1-ship-2048.png', size:140, alt:-3, lat:-25
                  , animate: { begin:10, end:40, lat:-9 } }
 
             }
         }
       , {
             title: 'Holiday Apartments'
-          , previewDuration: 2000 // in ms
+          , previewDuration: 25000 // in ms
+          , cutouts: {}
         }
       , {
             title: 'Demographics'
