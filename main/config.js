@@ -362,21 +362,28 @@ const
           , cutouts: {
 
                 //// Venice scene, from poster.
-                early_l_0: { src:'home-1-e-pharmacy-512.png', size:11, lat:1.5, lon:5, alt:-0.6 }
-              , early_r_0: { src:'home-1-a-veg-512.png', size:10, lon:0, alt:-0.3 }
-              , early_l_1: { src:'home-2-b-row-512.png', size:40, lat:-5, alt:-4 }
-              , early_r_1: { src:'home-2-a-hotel-512.png', size:35, lat:7, lon:7, alt:-2 }
+                early_l_0: { src:'home-1-e-pharmacy-1024.png', size:11, lat:1.5, lon:5, alt:-0.6 }
+              , early_r_0: { src:'home-1-a-veg-1024.png', size:10, lon:0, alt:-0.3 }
+              , early_l_1: { src:'home-2-b-row-1024.png', size:40, lat:-5, alt:-4 }
+              , early_r_1: { src:'home-2-a-hotel-1024.png', size:35, lat:7, lon:7, alt:-2 }
 
-              , early_l_2: { src:'home-1-c-shirts-512.png', size:9, lat:0.5, lon:-17, alt:-8.2
+              , early_l_2: { src:'home-1-c-shirts-1024.png', size:9, lat:0.5, lon:-17, alt:-8.2
                  , animate: { begin:0, end:1, alt:0 } }
-              , early_r_2: { src:'home-1-c-shirts-512.png', size:9, lat:1.5, lon:-21, alt:-8.2
+              , early_r_2: { src:'home-1-c-shirts-1024.png', size:9, lat:1.5, lon:-21, alt:-8.2
                  , animate: { begin:0.3, end:1.2, alt:0 } }
 
-              , early_l_3: { src:'home-1-b-postcards-512.png', size:9, lat:-1, lon:-27.5, alt:-9
+              , early_l_3: { src:'home-1-b-postcards-1024.png', size:9, lat:-1, lon:-27.5, alt:-9
                  , animate: { begin:0.1, end:2.5, alt:-1 } }
-              , early_r_3: { src:'home-1-b-postcards-512.png', size:10, lat:3, lon:-32, alt:-9
+              , early_r_3: { src:'home-1-b-postcards-1024.png', size:10, lat:3, lon:-32, alt:-9
                  , animate: { begin:0.5, end:3, alt:-1 } }
 
+              , early_r_4: { src:'home-1-d-bus-1024.png', size:15, lat:20, lon:-34, alt:-1
+                 , animate: { begin:-5, end:5, lat:-6 } }
+
+              , early_l_5: { src:'home-1-b-postcards-1024.png', size:8, lat:-5, lon:-43, alt:-9, FLIP
+                 , animate: { begin:1.1, end:3.5, alt:-1 } }
+              , early_r_5: { src:'home-1-b-postcards-1024.png', size:9, lat:3, lon:-45, alt:-9
+                 , animate: { begin:1.5, end:4, alt:-1 } }
 
 
           }
