@@ -327,7 +327,34 @@ const
         }
       , {
             title: 'Cruise Liners'
-          , previewDuration: 8000 // in ms
+          , previewDuration: 50000 // in ms
+          , cutouts: {
+
+                //// Venice scene, from poster.
+                early_r_2: { src:'cruise-b-2-lads-512.png', size:12, lat:0, alt:-0.3 }
+              , early_l_2: { src:'cruise-b-1-it-couple-512.png', size:12, lon:5, lat:0, alt:-0.3 }
+              , early_r_3: { src:'cruise-b-3-lasses-512.png', size:14, lat:4, alt:-1 }
+
+
+              , early_l_3: { src:'cruise-a-3-lamp-512.png'
+                  , size:7, lat:-2, alt:-0.5, repeat: { tally:5, lon:5, lat:-3 } }
+              , early_r_4: { src:'cruise-a-3-lamp-512.png'
+                  , size:6.5, lat:2, alt:-0.5, repeat: { tally:2, lon:2, lat:2 } }
+
+              , early_l_4: { src:'cruise-c-1-hands-512.png', size:10, lat:-3, lon:-3, alt:-8
+                 , animate: { begin:35, end:40, alt:-0.5 } }
+              , early_r_5: { src:'cruise-c-3-hat-512.png', size:8, lat:2, lon:-15, alt:-8
+                 , animate: { begin:35, end:40, alt:-0.5 } }
+
+              , early_l_7: { src:'bucket-3-a-queue-512.png'
+                 , size:20, alt:-1, lon:-20, repeat: { tally:2, lon:-7, lat:-7 } }
+
+              , early_l_5: { src:'cruise-a-2-columns-512.png', size:20, alt:-1, lat:-5 }
+              , early_l_6: { src:'cruise-a-4-building-512.png', size:60, alt:0, lat:-25, lon:0 }
+              , early_r_6: { src:'cruise-a-1-ship-1024.png', size:140, alt:-3, lat:-25
+                 , animate: { begin:10, end:40, lat:-9 } }
+
+            }
         }
       , {
             title: 'Holiday Apartments'

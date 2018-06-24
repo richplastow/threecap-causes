@@ -3,8 +3,8 @@
 #### Animated 3D motion-graphics, exploring some of the causes of overtourism, with video-capturing by
 [threecap](https://github.com/jbaicoianu/threecap)
 
-+ __Last update:__  2018/06/23
-+ __Version:__      1.1.2
++ __Last update:__  2018/06/24
++ __Version:__      1.1.3
 
 [Repo](https://github.com/richplastow/threecap-causes) &nbsp;
 [Demo](http://richplastow.com/threecap-causes/)  

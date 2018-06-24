@@ -3,10 +3,12 @@ import scene from './scene.js'
 import state from './state.js'
 import tween_0 from './tween-0.js'
 import tween_1 from './tween-1.js'
+import tween_2 from './tween-2.js'
 
 const tween = [
     tween_0
   , tween_1
+  , tween_2
 ]
 
 
