@@ -291,7 +291,7 @@ const
                //// Tower Bridge to Taj Mahal.
                early_l_2: { src:'bucket-1-g-tower-bridge-1024.png', size:40, alt:-3, lat:-4 }
              , early_r_4: { src:'bucket-1-d-pisa-1024.png', size:40, alt:-2, lat:2 }
-             , early_l_6: { src:'bucket-1-c-incas-1024.png', size:40, alt:-3 }
+             , early_l_6: { src:'bucket-1-c-incas-512.png', size:40, alt:-3 }
              , early_r_8: { src:'bucket-1-f-taj-1024.png', size:40, alt:-2, lat:4 }
 
 
@@ -358,8 +358,28 @@ const
         }
       , {
             title: 'Holiday Apartments'
-          , previewDuration: 25000 // in ms
-          , cutouts: {}
+          , previewDuration: 17000 // in ms
+          , cutouts: {
+
+                //// Venice scene, from poster.
+                early_l_0: { src:'home-1-e-pharmacy-512.png', size:11, lat:1.5, lon:5, alt:-0.6 }
+              , early_r_0: { src:'home-1-a-veg-512.png', size:10, lon:0, alt:-0.3 }
+              , early_l_1: { src:'home-2-b-row-512.png', size:40, lat:-5, alt:-4 }
+              , early_r_1: { src:'home-2-a-hotel-512.png', size:35, lat:7, lon:7, alt:-2 }
+
+              , early_l_2: { src:'home-1-c-shirts-512.png', size:9, lat:0.5, lon:-17, alt:-8.2
+                 , animate: { begin:0, end:1, alt:0 } }
+              , early_r_2: { src:'home-1-c-shirts-512.png', size:9, lat:1.5, lon:-21, alt:-8.2
+                 , animate: { begin:0.3, end:1.2, alt:0 } }
+
+              , early_l_3: { src:'home-1-b-postcards-512.png', size:9, lat:-1, lon:-27.5, alt:-9
+                 , animate: { begin:0.1, end:2.5, alt:-1 } }
+              , early_r_3: { src:'home-1-b-postcards-512.png', size:10, lat:3, lon:-32, alt:-9
+                 , animate: { begin:0.5, end:3, alt:-1 } }
+
+
+
+          }
         }
       , {
             title: 'Demographics'

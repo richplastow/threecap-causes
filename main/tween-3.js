@@ -29,8 +29,8 @@ const tweenDefs = [
                 cause    = config.causes[state.cause]
               , start    = cause.camStartLon
               , seeTitle = cause.titleLon - 40
-              , pause    = cause.titleLon + 40
-              , conclude = cause.camEndLon - 100
+              , pause    = cause.titleLon + 0
+              , conclude = cause.titleLon + 30
               , end      = cause.camEndLon
 
             tweenDefs[1].beginState.lon = config.stick || start
@@ -106,7 +106,7 @@ const tweenDefs = [
       , beginFrac:  0.35
       , endFrac:    0.6
       , tween:      null
-      , easing:     TWEEN.Easing.Quadratic.InOut
+      , easing:     TWEEN.Easing.Cubic.In
       , onReset:    function (def) {}
       , onUpdate:   function (def) { return function () {
             const camPos = state.cameraCurrent.position

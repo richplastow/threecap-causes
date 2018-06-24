@@ -198,8 +198,10 @@ let module; export default module = {
         // const nowFraction = now / state.currDuration * 1000
 
         //// Update any special animations.
-        const camLon =
+        let camLon =
             (state.cameraCurrent.position.lon + config.camLonOffset) % 360
+        if (300 < camLon) camLon = -(360 - camLon)
+
 document.title = (~~(camLon*10)) / 10
         animations.forEach( animation => {
             const
