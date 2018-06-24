@@ -291,7 +291,7 @@ const
                //// Tower Bridge to Taj Mahal.
                early_l_2: { src:'bucket-1-g-tower-bridge-1024.png', size:40, alt:-3, lat:-4 }
              , early_r_4: { src:'bucket-1-d-pisa-1024.png', size:40, alt:-2, lat:2 }
-             , early_l_6: { src:'bucket-1-c-incas-1024.png', size:40, alt:-3 }
+             , early_l_6: { src:'bucket-1-c-incas-512.png', size:40, alt:-3 }
              , early_r_8: { src:'bucket-1-f-taj-1024.png', size:40, alt:-2, lat:4 }
 
 
