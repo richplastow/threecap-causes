@@ -337,7 +337,7 @@ const
 
 
               , early_l_3: { src:'cruise-a-3-lamp-512.png'
-                  , size:7, lat:-2, alt:-0.5, repeat: { tally:5, lon:5, lat:-3 } }
+                  , size:7, lat:1, lon:-1, alt:-0.5, repeat: { tally:5, lon:5, lat:-3 } }
               , early_r_4: { src:'cruise-a-3-lamp-512.png'
                   , size:6.5, lat:2, alt:-0.5, repeat: { tally:2, lon:2, lat:2 } }
 
@@ -347,7 +347,7 @@ const
                  , animate: { begin:35, end:40, alt:-0.5 } }
 
               , early_l_7: { src:'bucket-3-a-queue-1024.png'
-                 , size:20, alt:-1, lon:-20, repeat: { tally:2, lon:-7, lat:-7 } }
+                 , size:20, alt:-1, lon:-21, repeat: { tally:2, lon:-7.3, lat:-7 } }
 
               , early_l_5: { src:'cruise-a-2-columns-1024.png', size:20, alt:-1, lat:-5 }
               , early_l_6: { src:'cruise-a-4-building-1024.png', size:60, alt:0, lat:-25, lon:0 }
@@ -390,7 +390,19 @@ const
         }
       , {
             title: 'Demographics'
-          , previewDuration: 4000 // in ms
+          , previewDuration: 32000 // in ms
+
+          , cutouts: {
+
+                //// Babies.
+                early_l_0: { src:'pop-1-a-baby-512.png', size:15, lat:0, lon:0 }
+
+              , pause_c_0: { src:'pop-1-a-baby-512.png', size:15, lat:0, lon:0 }
+
+              , late_l_6: { src:'pop-2-a-passport-left-512.png', size:7, lat:0, lon:0 }
+              , late_r_6: { src:'pop-2-b-passport-right-512.png', size:7, lat:0, lon:0 }
+
+            }
         }
     ]
 
